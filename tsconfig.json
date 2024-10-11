@@ -1,3 +1,36 @@
 {
-  "extends": "@react-native/typescript-config/tsconfig.json"
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "lib": [
+      "ES2021",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "module": "ES2022",
+    "paths": {
+      "@Action/*": ["./src/actions/*"],
+      "@Asset/*": ["./src/assets/*"],
+      "@Component/*": ["./src/components/*"],
+      "@Config/*": ["./src/config/*"],
+      "@Context/*": ["./src/contexts/*"],
+      "@Hook/*": ["./src/hooks/*"],
+      "@Navigator/*": ["./src/navigators/*"],
+      "@Screen/*": ["./src/screens/*"],
+      "@Service/*": ["./src/services/*"],
+      "@Store/*": ["./src/store/*"],
+      "@Type/*": ["./src/types/*"],
+      "@Util/*": ["./src/utils/*"],
+      "@firebase/auth": ["./node_modules/@firebase/auth/dist/index.rn.d.ts"]
+    },
+    "strict": true
+  },
+  "include": [
+    "global.d.ts",
+    "src/**/*",
+    "./App.tsx",
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

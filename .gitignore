@@ -24,7 +24,6 @@ DerivedData
 
 # Android/IntelliJ
 #
-build/
 .idea
 .gradle
 local.properties
@@ -33,6 +32,10 @@ local.properties
 .cxx/
 *.keystore
 !debug.keystore
+.yarnrc.yml
+.yarn
+
+__tests__
 
 # node.js
 #
