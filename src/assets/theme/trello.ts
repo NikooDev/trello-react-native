@@ -2,7 +2,8 @@ import { DefaultTheme } from '@react-navigation/native';
 import { StyleProp, TextStyle } from 'react-native';
 
 export const theme = {
-	primary: '#0065ff'
+	primary: '#0065ff',
+	default: '#f0f2f5'
 }
 
 export const NavigatorTheme = {
@@ -37,4 +38,14 @@ export const shadowButton = {
 export const shadowHeader = {
 	...shadow,
 	elevation: 5
+}
+
+export const shadowText = {
+	textShadowColor: '#000',
+	textShadowOffset: {
+		width: 1,
+		height: 1
+	},
+	textShadowOpacity: .5,
+	textShadowRadius: 5
 }

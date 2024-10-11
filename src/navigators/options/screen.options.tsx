@@ -2,6 +2,8 @@ import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { BottomTabBarProps, BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
 import Tabs from '@Component/navigator/tabs';
 import Header from '@Component/navigator/header';
+import { TabNavigationState } from '@react-navigation/native';
+import { RootStackUserType, TabBottomProps } from '@Type/stack';
 
 export const title = {
 	home: 'Trello',
@@ -26,7 +28,7 @@ export const modalOptions: NativeStackNavigationOptions = {
 export const tabOptions: BottomTabNavigationOptions = {
 	animation: 'shift',
 	headerShadowVisible: false,
-	header: (props) => <Header {...props}/>
+	header: (props) => <Header {...props} />
 }
 
 export const subTabOptions: BottomTabNavigationOptions = {

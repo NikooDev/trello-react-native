@@ -14,8 +14,8 @@ const Header = (props: BottomTabHeaderProps) => {
 	const screenName = route.name as keyof RootStackUserType;
 	const isHome = screenName === 'Home';
 	const isSettings = screenName === 'Profile';
-	const isAddTabs = screenName === 'CreateTask' || screenName === 'CreateProject' || screenName === 'Chat';
-	const isNotEllipsis = screenName !== 'Profile' && screenName !== 'CreateTask' && screenName !== 'CreateProject' && screenName !== 'Chat';
+	const isAddTabs = screenName === 'CreateProject' || screenName === 'Chat';
+	const isNotEllipsis = screenName !== 'Profile' && screenName !== 'CreateProject' && screenName !== 'Chat';
 	const dispatch = useDispatch();
 
 	const handleBottomSheet = () => {
@@ -26,7 +26,7 @@ const Header = (props: BottomTabHeaderProps) => {
 				height = 25;
 				break;
 			case 'Projects':
-				height = 25;
+				height = 18;
 				break;
 			case 'Calendar':
 				height = 25;
@@ -36,7 +36,7 @@ const Header = (props: BottomTabHeaderProps) => {
 				break;
 		}
 
-		dispatch(openBottomSheet({ bottomSheet: { name: screenName, height: height } }));
+		dispatch(openBottomSheet({ bottomSheet: { name: screenName, height: height, enablePanDownToClose: true, handleStyle: true } }));
 	}
 
   return (

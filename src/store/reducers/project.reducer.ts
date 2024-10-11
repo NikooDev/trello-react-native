@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { addProject, getProject, getProjects, removeProject, setProject } from '@Action/project.action';
 import { ProjectStateInterface } from '@Type/project';
+import { Photo } from 'pexels';
 
 /**
  * @description Project reducer -> Manage projects state
@@ -13,14 +14,25 @@ export const projectSlice = createSlice({
 		loading: false,
 		error: null,
 		tmpMembers: [],
-		tmpCover: null
+		tmpCoverID: null,
+		tmpCoverURI: {} as Photo['src'],
+		sortPriority: undefined
 	} as ProjectStateInterface,
 	reducers: {
 		setTmpMembers: (state, action) => {
 			state.tmpMembers = action.payload.reverse();
 		},
-		setTmpCover: (state, action) => {
-			state.tmpCover = action.payload;
+		setTmpCoverID: (state, action) => {
+			state.tmpCoverID = action.payload;
+		},
+		setTmpCoverURI: (state, action) => {
+			state.tmpCoverURI = action.payload;
+		},
+		setSortPriority: (state, action) => {
+			state.sortPriority = action.payload;
+		},
+		resetProjects: (state) => {
+			state.projects = [];
 		}
 	},
 	extraReducers: (builder) => {
@@ -108,9 +120,13 @@ export const projectSlice = createSlice({
 					uid = state.project.uid,
 					adminUID = state.project.adminUID,
 					membersUID = state.project.membersUID,
+					author = state.project.author,
+					priority = state.project.priority,
 					title = state.project.title,
 					cover = state.project.cover,
 					members = state.project.members,
+					nbTasks = state.project.nbTasks,
+					nbTasksEnd = state.project.nbTasksEnd,
 					created = state.project.created
 				} = action.payload;
 
@@ -118,9 +134,13 @@ export const projectSlice = createSlice({
 					uid,
 					adminUID,
 					membersUID,
+					author,
+					priority,
 					title,
 					cover,
 					members,
+					nbTasks,
+					nbTasksEnd,
 					created
 				};
 			}
@@ -154,7 +174,7 @@ export const projectSlice = createSlice({
 });
 
 export const {
-	setTmpMembers, setTmpCover
+	setTmpMembers, setTmpCoverID, setTmpCoverURI, setSortPriority, resetProjects
 } = projectSlice.actions;
 
 export default projectSlice.reducer;

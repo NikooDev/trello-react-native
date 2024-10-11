@@ -9,19 +9,13 @@ import P from '@Component/ui/text';
 const FloatButtons: React.FC<FloatButtonsInterface> = ({
 	handleActionButton,
 	buttonCreateProject,
-	buttonCreateTask,
 	buttonMessagerie
 }) => {
   return (
    <>
 		 <Animated.View style={buttonCreateProject}>
 			 <Pressable onPress={() => handleActionButton('CreateProject')} className="w-14 h-14 bg-sky-500 border-4 border-white items-center justify-center rounded-full" style={shadowButton}>
-				 <Icon name="cube" size={24} color="#FFF" />
-			 </Pressable>
-		 </Animated.View>
-		 <Animated.View style={buttonCreateTask}>
-			 <Pressable onPress={() => handleActionButton('CreateTask')} className="w-14 h-14 bg-pink-600 border-4 border-white items-center justify-center rounded-full" style={shadowButton}>
-				 <Icon name="clipboard" size={24} color="#FFF" />
+				 <Icon name="layers" size={24} color="#FFF" />
 			 </Pressable>
 		 </Animated.View>
 		 <Animated.View style={buttonMessagerie}>

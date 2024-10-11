@@ -29,7 +29,7 @@ const Tabs = (props: BottomTabBarProps) => {
 	const originalHeight = 153;
 	const aspectRatio = originalWidth / originalHeight;
 	const { state, navigation } = props;
-	const { overlayOpacity, overlayStyle, rotateStyle, rotate, buttonCreateProject, buttonCreateTask, buttonMessagerie, displayIcon } = useBottomBar(menuOpen);
+	const { overlayOpacity, overlayStyle, buttonCreateProject, buttonCreateTask, buttonMessagerie, displayIcon } = useBottomBar(menuOpen);
 	const { chatBadge } = useSelector((state: RootStateType) => state.app);
 
 	const handlePressIn = (index: number, isFocused: boolean) => {
@@ -39,7 +39,7 @@ const Tabs = (props: BottomTabBarProps) => {
 		}
 	}
 
-	const handlePressOut = (routeName: string, routeKey: string, isFocused: boolean) => {
+	const handlePressOut = (routeName: string, screenName: string, routeKey: string, isFocused: boolean) => {
 		let timer: ReturnType<typeof setTimeout>;
 
 		const event = navigation.emit({
@@ -51,7 +51,7 @@ const Tabs = (props: BottomTabBarProps) => {
 		overlayOpacity.value = withTiming(0, { duration: 200, easing: Easing.linear });
 		timer = setTimeout(() => setPressIndex(null), 300);
 
-		if (routeName === 'Add') {
+		if (routeName === 'Menu') {
 			setMenuOpen((prevState) => !prevState);
 		} else {
 			setMenuOpen(false);
@@ -66,8 +66,8 @@ const Tabs = (props: BottomTabBarProps) => {
 		if (!isFocused && !event.defaultPrevented) {
 			clearTimeout(timer);
 
-			if (routeName !== 'Add') {
-				navigation.navigate(routeName);
+			if (routeName !== 'Menu') {
+				navigation.navigate(routeName, { screen: screenName });
 			}
 		}
 	}
@@ -75,11 +75,10 @@ const Tabs = (props: BottomTabBarProps) => {
 	const handleActionButton = (name: string) => {
 		setMenuOpen(false);
 
-		navigation.navigate('Add', { screen: name });
+		navigation.navigate('Menu', { screen: name });
 	}
 
 	const handleOutside = () => {
-		rotate.value = withTiming(0, { duration: 200 });
 		setMenuOpen(false);
 	}
 
@@ -111,6 +110,7 @@ const Tabs = (props: BottomTabBarProps) => {
 				{
 					state.routes.map((route, index) => {
 						const { icon, title } = displayIcon(route);
+						const { screen } = route.params as { screen: string };
 						const isFocused = state.index === index;
 						const offset = offsetButton(index);
 						const offsetAddButton = index === 2 && '-mt-[24.3px]';
@@ -119,7 +119,7 @@ const Tabs = (props: BottomTabBarProps) => {
 						return (
 							<Pressable key={index}
 												 onPressIn={() => handlePressIn(index, isFocused)}
-												 onPressOut={() => handlePressOut(route.name, route.key, isFocused)}
+												 onPressOut={() => handlePressOut(route.name, screen, route.key, isFocused)}
 												 className={Class(buttonClass, offsetAddButton)}
 												 style={{marginLeft: offset}}>
 								<View className={Class('items-center', index !== 2 && 'py-3 h-16 w-16')}>
@@ -133,8 +133,7 @@ const Tabs = (props: BottomTabBarProps) => {
 									<View className={Class(index === 2 && 'bg-primary rounded-full items-center justify-center h-16 w-16')}>
 										<Animated.View entering={FadeIn.duration(150)}
 																	 exiting={FadeOut.duration(150)}
-																	 key={isFocused ? icon : icon + '-outline'}
-																	 style={index === 2 ? [rotateStyle] : null}>
+																	 key={isFocused ? icon : icon + '-outline'}>
 											<AnimatedIcon name={isFocused ? icon : icon + '-outline'}
 																		className={Class(index === 2 ? 'text-white' : 'text-slate-600', isFocused && 'text-primary', index === 2 && 'text-white')}
 																		size={index === 2 ? 43 : 24}/>

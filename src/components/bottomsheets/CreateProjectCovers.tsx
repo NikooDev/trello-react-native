@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Dimensions, Pressable, View } from 'react-native';
 import { theme } from '@Asset/theme/trello';
-import { setTmpCover } from '@Store/reducers/project.reducer';
+import { setTmpCoverID, setTmpCoverURI } from '@Store/reducers/project.reducer';
 import { closeBottomSheet } from '@Store/reducers/app.reducer';
 import FastImage from 'react-native-fast-image';
 import { useDispatch } from 'react-redux';
@@ -39,8 +39,9 @@ const CreateProjectCovers = () => {
 		bottomListRef.current?.scrollToIndex({index: 0});
 	}
 
-	const handleSetCover = (id: number) => {
-		dispatch(setTmpCover(id));
+	const handleSetCover = (id: number, src: Photo['src']) => {
+		dispatch(setTmpCoverID(id));
+		dispatch(setTmpCoverURI(src));
 		dispatch(closeBottomSheet());
 	}
 
@@ -56,7 +57,7 @@ const CreateProjectCovers = () => {
 															 numColumns={2}
 															 keyExtractor={(item, _) => item.id.toString()}
 															 renderItem={({ item, index }) => (
-																 <Pressable onPress={() => handleSetCover(item.id)} key={index} style={{width: width / 2, height: (width / 2) * 4 / 3}}>
+																 <Pressable onPress={() => handleSetCover(item.id, item.src)} key={index} style={{width: width / 2, height: (width / 2) * 4 / 3}}>
 																	 <FastImage source={{uri: item.src.portrait}} resizeMode="cover" style={{width: width / 2, height: (width / 2) * 4 / 3, borderRadius: 10}}/>
 																 </Pressable>
 															 )}/>

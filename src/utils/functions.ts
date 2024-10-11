@@ -28,8 +28,6 @@ export const bgHeader = (screenName: keyof RootStackUserType): string => {
 	switch (screenName) {
 		case 'CreateProject':
 			return 'bg-sky-500';
-		case 'CreateTask':
-			return 'bg-pink-600';
 		case 'Chat':
 			return 'bg-primary';
 		default:

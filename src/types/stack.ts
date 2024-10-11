@@ -1,4 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RouteProp } from '@react-navigation/native';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
 export type RootStackGuestType = {
   Home: undefined;
@@ -6,17 +8,23 @@ export type RootStackGuestType = {
   Users: undefined;
 };
 
+interface RootStackUserTypeParams {
+	screen?: string,
+	params?: {
+		[key: string]: any
+	}
+}
+
 export type RootStackUserType = {
-	Home: undefined;
-	Projects: undefined;
-	Add: undefined;
-	Calendar: undefined;
-	Profile: undefined;
-	CreateProject: undefined;
-	Project: undefined;
-	CreateTask: undefined;
-	Task: undefined;
-	Chat: undefined;
+	Home: RootStackUserTypeParams;
+	Projects: RootStackUserTypeParams;
+	Menu: RootStackUserTypeParams;
+	Calendar: RootStackUserTypeParams;
+	Profile: RootStackUserTypeParams;
+	CreateProject: RootStackUserTypeParams;
+	Project: RootStackUserTypeParams;
+	Task: RootStackUserTypeParams;
+	Chat: RootStackUserTypeParams;
 }
 
 export type RootStackParamList<T> = T;
@@ -30,3 +38,5 @@ export interface RootStackGuestNavigation {
 export interface RootStackUserNavigation {
 	navigation: RootStackPropsUser<keyof RootStackParamList<RootStackUserType>>['navigation'];
 }
+
+export type TabBottomProps = { route: RouteProp<RootStackUserType>, navigation: BottomTabNavigationProp<RootStackUserType> }
