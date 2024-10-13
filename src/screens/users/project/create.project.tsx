@@ -125,7 +125,7 @@ const CreateProject = ({ navigation }: RootStackPropsUser<'CreateProject'>) => {
 
     const project = {
       uid: '',
-      title: title,
+      title: title.trim(),
       adminUID: user.uid,
       membersUID: membersUID,
       priority,
@@ -161,9 +161,9 @@ const CreateProject = ({ navigation }: RootStackPropsUser<'CreateProject'>) => {
       <KeyboardAwareScrollView bottomOffset={70} extraKeyboardSpace={-60} className="mt-4 px-4" keyboardShouldPersistTaps="handled" contentContainerStyle={{justifyContent: 'center'}}>
         <ScrollView ref={scrollRef} contentContainerStyle={{flex: 1, paddingBottom: 125}}>
           <View className="mb-4">
-            <P size={18} weight="semibold" className="mb-3">Titre du projet</P>
+            <P size={18} weight="semibold" className="mb-3">Nom du projet</P>
             <TextInput className="bg-white border border-slate-200 rounded-2xl px-4 font-text-regular text-base text-black/80"
-                       placeholder="Mon projet"
+                       placeholder="Nom du projet"
                        placeholderTextColor="#0000005f"
                        cursorColor="#0000008f"
                        value={title}

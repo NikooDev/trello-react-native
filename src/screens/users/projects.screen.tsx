@@ -8,19 +8,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getProjects } from '@Action/project.action';
 import { useFocusEffect } from '@react-navigation/native';
 import { FlatList } from 'react-native-gesture-handler';
-import ScreenLayout from '@Component/layouts/screen.layout';
-import P from '@Component/ui/text';
-import FastImage from 'react-native-fast-image';
 import { cap, formatRelativeDate } from '@Util/functions';
+import FastImage from 'react-native-fast-image';
 import { DateTime } from 'luxon';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { resetProjects, setSortPriority } from '@Store/reducers/project.reducer';
 import { shadowText, theme } from '@Asset/theme/trello';
+import ScreenLayout from '@Component/layouts/screen.layout';
+import P from '@Component/ui/text';
 import Avatar from '@Component/ui/avatar';
 import Button from '@Component/ui/button';
 
 const ProjectsScreen = ({ navigation } : RootStackPropsUser<'Projects'>) => {
 	const { user } = useSelector((state: RootStateType) => state.user);
-	const { projects, loading, sortPriority } = useSelector((state: RootStateType) => state.project);
+	const { projects, loading, sortPriority, error } = useSelector((state: RootStateType) => state.project);
 	const { width } = Dimensions.get('screen');
 	const dispatch = useDispatch<RootDispatch>();
 
@@ -37,7 +38,7 @@ const ProjectsScreen = ({ navigation } : RootStackPropsUser<'Projects'>) => {
 			return () => {
 				dispatch(resetProjects());
 			}
-		}, [loadProjects])
+		}, [loadProjects, dispatch])
 	);
 
 	const filterProjectsByPriority = (pr: PriorityEnum | undefined) => {
@@ -52,7 +53,7 @@ const ProjectsScreen = ({ navigation } : RootStackPropsUser<'Projects'>) => {
 		<ScreenLayout statusBarStyle="default" className="py-4">
 			<View className="flex-1">
 				{
-					!loading && projects.length === 0 && (
+					!loading && !error && projects.length === 0 && (
 						<Animated.View entering={FadeInUp.delay(300)} className="flex-1 items-center justify-center">
 							<FastImage source={require('@Asset/img/login.webp')} className="h-52 opacity-50 absolute top-14" resizeMode="contain" style={{width: width - 90}}/>
 							<P size={20} weight="semibold" className="text-center mb-4">Vous n'avez pas encore de projet</P>
@@ -62,7 +63,7 @@ const ProjectsScreen = ({ navigation } : RootStackPropsUser<'Projects'>) => {
 				}
 				{
 					sortPriority && (
-						<View className="px-4 mb-4 flex-row items-center justify-between">
+						<View className="px-4 mb-3 flex-row items-center justify-between">
 							<View className="flex-row items-center">
 								<P size={20} weight="semibold" className="mr-1">Filtre : </P>
 								{
@@ -72,7 +73,11 @@ const ProjectsScreen = ({ navigation } : RootStackPropsUser<'Projects'>) => {
 								}
 								{
 									sortPriority === PriorityEnum.MEDIUM && (
-										<Button textSize={0} icon="pause-outline" className="bg-orange-500 px-3 py-1" textLight iconSize={20} children={null}/>
+										<Button textSize={20} icon="pause-outline" className="bg-orange-500 px-3 py-1" textLight>
+											<View style={{ transform: [{ rotate: '90deg' }] }}>
+												<Icon name="pause-outline" size={20} color="#fff"/>
+											</View>
+										</Button>
 									)
 								}
 								{
@@ -88,7 +93,7 @@ const ProjectsScreen = ({ navigation } : RootStackPropsUser<'Projects'>) => {
 				{
 					loading ? (
 						<ActivityIndicator size="large" color={theme.primary} className="mt-4"/>
-					) : (
+					) : filterProjectsByPriority(sortPriority).length > 0 && !error && (
 						<FlatList
 							extraData={sortPriority}
 							data={filterProjectsByPriority(sortPriority)}
@@ -110,7 +115,7 @@ const ProjectsScreen = ({ navigation } : RootStackPropsUser<'Projects'>) => {
 											</View>
 											<View className="bg-white py-3 px-4 rounded-b-2xl">
 												<P size={15} weight="semibold">Créé par { item.author }</P>
-												<P size={15} weight="semibold" className="mt-1">Progression</P>
+												<P size={15} weight="semibold" className="mt-1">Progression :</P>
 												<View className="relative mt-3 mb-4">
 													<P size={12} weight="bold" light={progress > 50} className="absolute w-full text-center z-10 top-0.5">{ progress }%</P>
 													<View className="bg-slate-300 w-full h-5 rounded-2xl absolute top-0"/>
@@ -136,6 +141,11 @@ const ProjectsScreen = ({ navigation } : RootStackPropsUser<'Projects'>) => {
 									</Animated.View>
 								)
 							}}/>
+					)
+				}
+				{
+					error && (
+						<P size={20} weight="semibold" className="text-center mt-4">{ error }</P>
 					)
 				}
 			</View>

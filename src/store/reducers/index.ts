@@ -3,12 +3,14 @@ import appReducer from '@Store/reducers/app.reducer';
 import authReducer from '@Store/reducers/auth.reducer';
 import userReducer from '@Store/reducers/user.reducer';
 import projectReducer from '@Store/reducers/project.reducer';
+import listReducer from '@Store/reducers/list.reducer';
 
 const rootReducer = combineReducers({
   app: appReducer,
   auth: authReducer,
   user: userReducer,
-  project: projectReducer
+  project: projectReducer,
+  list: listReducer
 });
 
 const rootSlice = createSlice({

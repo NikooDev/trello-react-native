@@ -29,8 +29,8 @@ const Tabs = (props: BottomTabBarProps) => {
 	const originalHeight = 153;
 	const aspectRatio = originalWidth / originalHeight;
 	const { state, navigation } = props;
-	const { overlayOpacity, overlayStyle, buttonCreateProject, buttonCreateTask, buttonMessagerie, displayIcon } = useBottomBar(menuOpen);
-	const { chatBadge } = useSelector((state: RootStateType) => state.app);
+	const { overlayOpacity, overlayStyle, buttonCreateProject, buttonMessagerie, displayIcon } = useBottomBar(menuOpen);
+	const { user } = useSelector((state: RootStateType) => state.user);
 
 	const handlePressIn = (index: number, isFocused: boolean) => {
 		if (!isFocused) {
@@ -103,8 +103,7 @@ const Tabs = (props: BottomTabBarProps) => {
 			<View className="absolute items-center">
 				<FloatButtons handleActionButton={handleActionButton}
 											buttonCreateProject={buttonCreateProject}
-											buttonCreateTask={buttonCreateTask}
-											buttonMessagerie={buttonMessagerie}/>
+											buttonMessagerie={buttonMessagerie} badgeChat={user.badgeChat}/>
 			</View>
 			<View className="flex-row justify-around absolute top-1/2 w-full">
 				{
@@ -157,10 +156,10 @@ const Tabs = (props: BottomTabBarProps) => {
 									}
 								</View>
 								{
-									index === 2 && chatBadge > 0 && (
-										<Animated.View entering={ZoomIn.duration(150)} exiting={ZoomOut.duration(150)} key={chatBadge > 0 ? '1' : '0'} className="bg-red-500 border-2 border-white py-0.5 pb-1 absolute -top-0.5 rounded-full"
+									index === 2 && user.badgeChat > 0 && (
+										<Animated.View entering={ZoomIn.duration(150)} exiting={ZoomOut.duration(150)} key={user.badgeChat > 0 ? '1' : '0'} className="bg-red-500 border-2 border-white py-0.5 pb-1 absolute -top-0.5 rounded-full"
 													style={{...shadowButton, left: 60, paddingHorizontal: 7}}>
-											<P size={12} light weight="bold">{ chatBadge }</P>
+											<P size={12} light weight="bold">{ user.badgeChat }</P>
 										</Animated.View>
 									)
 								}

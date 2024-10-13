@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import { AppStateInterface, AppStateActionsInterface } from '@Type/app';
 
 const initialAppState = {
-	chatBadge: 0,
 	bottomSheet: {
 		open: false,
 		enablePanDownToClose: true,
@@ -16,9 +15,6 @@ export const appSlice = createSlice({
 	name: 'appReducer',
 	initialState: initialAppState as AppStateInterface,
 	reducers: {
-		setChatBadge(state, action) {
-			state.chatBadge = action.payload;
-		},
 		openBottomSheet(state, action: AppStateActionsInterface) {
 			state.bottomSheet = {
 				...initialAppState.bottomSheet,
@@ -36,7 +32,7 @@ export const appSlice = createSlice({
 });
 
 export const {
-	setChatBadge, openBottomSheet, closeBottomSheet
+	openBottomSheet, closeBottomSheet
 } = appSlice.actions;
 
 export default appSlice.reducer;

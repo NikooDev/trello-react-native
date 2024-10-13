@@ -45,42 +45,6 @@ class FirstoreService<T> {
 	}
 
 	/**
-	 *
-	 * /!\ A REVOIR AU MOMENT DE L'UTILISATION
-	 *
-	 *
-	 * @description Get a document from a sub-collection
-	 * db.collection('users').doc(user.uid).collection('booksList').doc(book.uid).get
-	 * @param uid
-	 * @param subCollectionPath
-	 */
-	public async getSubDocument<T extends CreatedInterface>(uid: string, subCollectionPath: string[]): Promise<T[] | null> {
-		const fullPath = [...subCollectionPath, this.collectionName].join('/');
-
-		const ref = collection(this.db, fullPath) as CollectionReference<T>;
-
-		try {
-			const subCollectionSnapshot = await getDocs(ref);
-
-			return subCollectionSnapshot.docs.map(doc => {
-				const data = {
-					uid: doc.id,
-					...doc.data() as T,
-				};
-
-				if (data.created) {
-					data.created = this.transformDate(data.created);
-				}
-
-				return data;
-			});
-		} catch (err) {
-			console.error('Error getting sub-collection:', err);
-			return null;
-		}
-	}
-
-	/**
 	 * @description Search documents in a collection
 	 * @param queries
 	 */
@@ -164,14 +128,11 @@ class FirstoreService<T> {
 
 	/**
 	 * @description Create a document in a collection
-	 * pathSegments = [subCol1, subCol1UID, subcol2, subCol2UID, ...]
 	 * @param data
-	 * @param pathSegments
 	 */
-	public async createDocument<T extends { uid?: string | null }>(data: T, pathSegments: string[]): Promise<{ valid: boolean, uid: string | null }> {
+	public async createDocument<T extends { uid?: string | null }>(data: T): Promise<{ valid: boolean, uid: string | null }> {
 		try {
-			const fullPath = [...pathSegments, this.collectionName].join('/');
-			const ref = collection(this.db, fullPath) as CollectionReference<T>;
+			const ref = collection(this.db, this.collectionName) as CollectionReference<T>;
 
 			const newDocRef = doc(ref);
 			const generatedId = newDocRef.id;

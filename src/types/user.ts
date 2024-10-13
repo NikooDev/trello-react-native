@@ -6,6 +6,7 @@ export interface UserInterface extends CreatedInterface {
 	lastname: string;
 	email: string;
 	avatarID: string;
+	badgeChat: number;
 }
 
 export interface UserStateInterface {

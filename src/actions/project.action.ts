@@ -5,14 +5,14 @@ import Firebase from '@Service/firebase/init';
 
 /**
  * @description Check if the user is an admin or a member admin of the project
- * @param uid
+ * @param projectUID
  * @param firestore
  */
-const isGuardAdmin = async (uid: string, firestore: FirestoreService<ProjectInterface>): Promise<string | null> => {
-	const projectExist = await firestore.getDocument<ProjectInterface>(uid);
+export const isGuardAdmin = async (projectUID: string, firestore: FirestoreService<ProjectInterface>): Promise<string | null> => {
+	const projectExist = await firestore.getDocument<ProjectInterface>(projectUID);
 
 	if (!projectExist) {
-		return `Le projet ${uid} n'existe pas`;
+		return `Le projet ${projectUID} n'existe pas`;
 	}
 
 	const auth = new Firebase().auth;
@@ -42,7 +42,7 @@ export const addProject = createAsyncThunk(
 		const firestore = new FirestoreService<ProjectInterface>('projects');
 
 		try {
-			const projectCreated = await firestore.createDocument(project, []);
+			const projectCreated = await firestore.createDocument(project);
 
 			if (!projectCreated.valid) {
 				return rejectWithValue('Erreur lors de la création du projet');

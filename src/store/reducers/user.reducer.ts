@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getUser } from '@Action/user.action';
+import { getUser, setUser } from '@Action/user.action';
 import { UserInterface, UserStateInterface } from '@Type/user';
 
 export const userSlice = createSlice({
@@ -12,18 +12,50 @@ export const userSlice = createSlice({
 	reducers: {},
 	extraReducers: (builder) => {
 		builder
-		.addCase(getUser.pending, (state) => {
+			.addCase(getUser.pending, (state) => {
+				state.loading = true;
+				state.error = null;
+			})
+			.addCase(getUser.fulfilled, (state, action) => {
+				state.loading = false;
+				state.user = action.payload;
+			})
+			.addCase(getUser.rejected, (state, action) => {
+				state.loading = false;
+				state.error = action.payload as string;
+			})
+
+		.addCase(setUser.pending, (state) => {
 			state.loading = true;
 			state.error = null;
 		})
-		.addCase(getUser.fulfilled, (state, action) => {
+		.addCase(setUser.fulfilled, (state, action) => {
 			state.loading = false;
-			state.user = action.payload;
+
+			if (action.payload) {
+				const {
+					uid = state.user.uid,
+					firstname = state.user.firstname,
+					lastname = state.user.lastname,
+					email = state.user.email,
+					avatarID = state.user.avatarID,
+					badgeChat = state.user.badgeChat
+				} = action.payload;
+
+				state.user = {
+					uid,
+					firstname,
+					lastname,
+					email,
+					avatarID,
+					badgeChat
+				};
+			}
 		})
-		.addCase(getUser.rejected, (state, action) => {
+		.addCase(setUser.rejected, (state, action) => {
 			state.loading = false;
 			state.error = action.payload as string;
-		});
+		})
 	}
 });
 

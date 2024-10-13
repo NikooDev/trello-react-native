@@ -1,5 +1,4 @@
 export interface AppStateInterface {
-	chatBadge: number;
 	bottomSheet: {
 		open: boolean;
 		enablePanDownToClose?: boolean;

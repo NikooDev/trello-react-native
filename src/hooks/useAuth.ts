@@ -1,7 +1,8 @@
 import { useCallback, useEffect } from 'react';
 import { onAuthStateChanged, type User } from 'firebase/auth';
 import { useDispatch } from 'react-redux';
-import { getUser } from '@Action/user.action';
+import { getUser, setUser } from '@Action/user.action';
+import { doc, onSnapshot } from 'firebase/firestore';
 import { RootDispatch } from '@Type/store';
 import Firebase, { authKey } from '@Service/firebase/init';
 import { setLoginError, setLoginSuccess, setLogout } from '@Store/reducers/auth.reducer';
@@ -26,6 +27,7 @@ const useAuth = () => {
 					if (token) {
 						dispatch(getUser(user.uid));
 						loginState();
+						onUserStateChange(user.uid);
 					} else {
 						logoutState();
 					}
@@ -42,6 +44,33 @@ const useAuth = () => {
 			unsubscribe();
 		}
 	}, [dispatch]);
+
+	/**
+	 * @description Listens for user state changes
+	 * @param userUID
+	 */
+	const onUserStateChange = (userUID: string) => {
+		const db = new Firebase().db;
+
+		const userDocRef = doc(db, 'users', userUID);
+
+		const unsubscribe = onSnapshot(userDocRef, (doc) => {
+			if (doc.exists()) {
+				const user = doc.data();
+
+				dispatch(setUser(user));
+			} else {
+				logoutState();
+			}
+		}, (error) => {
+			console.error('Error listening to user document:', error);
+			logoutState();
+		});
+
+		return () => {
+			unsubscribe();
+		}
+	}
 
 	/**
 	 * @description Checks the user's authentication only once

@@ -2,7 +2,6 @@ module.exports = {
   presets: ['module:@react-native/babel-preset'],
   plugins: [
     'nativewind/babel',
-    'react-native-reanimated/plugin',
     [
       'module-resolver',
       {
@@ -24,6 +23,7 @@ module.exports = {
           'react-native-linear-gradient': './node_modules/react-native-linear-gradient/index.js'
         }
       }
-    ]
+    ],
+    'react-native-reanimated/plugin'
   ]
 };

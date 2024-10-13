@@ -11,7 +11,7 @@ export const projectSlice = createSlice({
 	initialState: {
 		projects: [],
 		project: null,
-		loading: false,
+		loading: true,
 		error: null,
 		tmpMembers: [],
 		tmpCoverID: null,
@@ -33,6 +33,11 @@ export const projectSlice = createSlice({
 		},
 		resetProjects: (state) => {
 			state.projects = [];
+			state.loading = true;
+		},
+		resetProject: (state) => {
+			state.project = null;
+			state.loading = true;
 		}
 	},
 	extraReducers: (builder) => {
@@ -174,7 +179,7 @@ export const projectSlice = createSlice({
 });
 
 export const {
-	setTmpMembers, setTmpCoverID, setTmpCoverURI, setSortPriority, resetProjects
+	setTmpMembers, setTmpCoverID, setTmpCoverURI, setSortPriority, resetProjects, resetProject
 } = projectSlice.actions;
 
 export default projectSlice.reducer;

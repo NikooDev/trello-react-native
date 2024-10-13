@@ -27,8 +27,8 @@ export type ButtonInterface = Button & React.ComponentProps<typeof Pressable>;
 export interface FloatButtonsInterface {
 	handleActionButton: (name: string) => void;
 	buttonCreateProject: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
-	buttonCreateTask: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
 	buttonMessagerie: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
+	badgeChat: number;
 }
 
 export interface AvatarInterface {

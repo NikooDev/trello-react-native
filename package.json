@@ -6,11 +6,14 @@
     "start": "npx react-native start",
     "asset": "npx react-native-asset",
     "pod": "npx pod-install",
-    "reset": "npx react-native start --reset-cache"
+    "reset": "npx react-native start --reset-cache",
+    "build": "cd android && ./gradlew assembleRelease",
+    "install": "adb install android/app/build/outputs/apk/release/app-release.apk"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^4.6.4",
     "@react-native-async-storage/async-storage": "^2.0.0",
+    "@react-native-community/blur": "^4.4.1",
     "@react-navigation/bottom-tabs": "next",
     "@react-navigation/native": "next",
     "@react-navigation/native-stack": "next",

@@ -10,6 +10,6 @@ export interface TaskInterface {
 	description: string;
 	author: string;
 	contributors: string[];
-	created: Date;
 	priority: PriorityEnum;
+	created: Date;
 }
