@@ -13,10 +13,10 @@ export const projectSlice = createSlice({
 		project: null,
 		loading: true,
 		error: null,
+		sortPriority: undefined,
 		tmpMembers: [],
 		tmpCoverID: null,
-		tmpCoverURI: {} as Photo['src'],
-		sortPriority: undefined
+		tmpCoverURI: {} as Photo['src']
 	} as ProjectStateInterface,
 	reducers: {
 		setTmpMembers: (state, action) => {

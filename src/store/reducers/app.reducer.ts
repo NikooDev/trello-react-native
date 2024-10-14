@@ -7,7 +7,8 @@ const initialAppState = {
 		enablePanDownToClose: true,
 		handleStyle: false,
 		height: 50,
-		name: null
+		name: null,
+		data: null
 	}
 };
 

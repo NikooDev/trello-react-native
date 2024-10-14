@@ -35,7 +35,7 @@ export const signup = async ({ email, password, firstname, lastname, avatarID }:
 				avatarID
 			}
 
-			const userCreated = await firestore.createDocument(user, []);
+			const userCreated = await firestore.createDocument(user);
 
 			if (userCreated.valid) {
 				return await newUser.getIdToken();

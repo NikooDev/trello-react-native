@@ -1,6 +1,6 @@
-import React, { useCallback } from 'react';
-import { ActivityIndicator, Dimensions, Pressable, View } from 'react-native';
-import { PriorityEnum } from '@Type/project';
+import React, { useCallback, useState } from 'react';
+import { ActivityIndicator, Alert, Dimensions, Pressable, View } from 'react-native';
+import { MemberRole, PriorityEnum } from '@Type/project';
 import { RootStackPropsUser } from '@Type/stack';
 import { RootDispatch, RootStateType } from '@Type/store';
 import Animated, { FadeInLeft, FadeInUp } from 'react-native-reanimated';
@@ -101,16 +101,24 @@ const ProjectsScreen = ({ navigation } : RootStackPropsUser<'Projects'>) => {
 							keyExtractor={(item) => item.uid!.toString()}
 							renderItem={({ item, index }) => {
 								const progress = item.nbTasks > 0 ? (item.nbTasksEnd / item.nbTasks) * 100 : 0;
+								const isMembers = item.members.some((member) => member.uid === user.uid && member.role === MemberRole.MEMBER);
 
 								return (
-									<Animated.View entering={FadeInLeft.delay(80 * index)} key={sortPriority} className="mb-3">
+									<Animated.View entering={FadeInLeft.delay(100 * index)} key={sortPriority} className="mb-3">
 										<Pressable className="relative px-4" onPress={() => navigation.navigate('Menu', { screen: 'Project', params: { uid: item.uid } })}>
 											<View className="rounded-t-2xl overflow-hidden">
 												<View className="absolute z-10 px-4 pt-3.5 w-full h-full">
 													<P size={28} weight="semibold" light style={shadowText}>{ cap(item.title) }</P>
-													<P size={13} weight="semibold" light style={shadowText}>{ item.nbTasks } tâche{ item.nbTasks > 1 && 's' }</P>
+													<P size={15} weight="semibold" className="mt-1" light style={shadowText}>{ item.nbTasks } tâche{ item.nbTasks > 1 && 's' }</P>
 												</View>
-												<FastImage source={{uri: item.cover.landscape}} resizeMode="cover" style={{width, height: width / 5.5}}/>
+												{ isMembers && (
+													<Button onPress={() => Alert.alert(`Projet ${cap(item.title)}`, 'Ce projet est en lecture seule.\nVous ne pouvez pas le modifier ni le supprimer.')}
+																className="h-8 w-8 absolute right-2 bottom-2 z-10"
+																textSize={0} icon="lock-closed"
+																iconSize={20} color="none"
+																iconColor="#fff" children={null}/>
+												)}
+												<FastImage source={{uri: item.cover.landscape}} resizeMode="cover" style={{width, height: isMembers ? width / 4.3 : width / 5}}/>
 												<View className="bg-black/50 h-full w-full absolute top-0 left-0"/>
 											</View>
 											<View className="bg-white py-3 px-4 rounded-b-2xl">
@@ -140,7 +148,8 @@ const ProjectsScreen = ({ navigation } : RootStackPropsUser<'Projects'>) => {
 										</Pressable>
 									</Animated.View>
 								)
-							}}/>
+							}}
+						/>
 					)
 				}
 				{

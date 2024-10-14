@@ -19,6 +19,7 @@ import Button from '@Component/ui/button';
 import Avatar from '@Component/ui/avatar';
 import P from '@Component/ui/text';
 import { cap } from '@Util/functions';
+import { useFocusEffect } from '@react-navigation/native';
 
 const CreateProject = ({ navigation }: RootStackPropsUser<'CreateProject'>) => {
   const [title, setTitle] = useState<string | undefined>(undefined);
@@ -36,6 +37,19 @@ const CreateProject = ({ navigation }: RootStackPropsUser<'CreateProject'>) => {
     { icon: 'pause-outline', value: PriorityEnum.MEDIUM, color: 'bg-yellow-500' },
     { icon: 'arrow-down-outline', value: PriorityEnum.LOW, color: 'bg-green-500' }
   ];
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setTitle(undefined);
+        setCover(undefined);
+        setPriority(undefined);
+        dispatch(setTmpCoverURI({}));
+        dispatch(setTmpCoverID(null));
+        dispatch(setTmpMembers([]));
+      };
+    }, [dispatch])
+  )
 
   useEffect(() => {
     if (scrollRef.current && (title && cover && priority)) {
@@ -176,11 +190,11 @@ const CreateProject = ({ navigation }: RootStackPropsUser<'CreateProject'>) => {
                 <Pressable
                   key={p.value}
                   onPress={() => setPriority(p.value)}
-                  className={`${priority === p.value ? p.color : 'bg-slate-300'}
+                  className={`${priority === p.value ? p.color : 'bg-white'}
                   ${p.value === PriorityEnum.LOW && 'rounded-r-2xl rounded-l-lg'}
                   ${p.value === PriorityEnum.MEDIUM && 'rounded-lg'}
                   ${p.value === PriorityEnum.HIGH && 'rounded-l-2xl rounded-r-lg'}
-                  px-4 py-2 flex-1 items-center justify-center`
+                  px-4 py-2 flex-1 items-center justify-center border border-slate-200`
                 }>
                   <Icon name={p.icon} size={24} color={priority === p.value ? '#fff' : '#0000009f'} style={{transform: [{ rotate: p.value === PriorityEnum.MEDIUM ? '90deg' : '0deg' }]}}/>
                 </Pressable>

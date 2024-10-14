@@ -12,13 +12,13 @@ export const isGuardAdmin = async (projectUID: string, firestore: FirestoreServi
 	const projectExist = await firestore.getDocument<ProjectInterface>(projectUID);
 
 	if (!projectExist) {
-		return `Le projet ${projectUID} n'existe pas`;
+		return `Le projet ${projectUID} n'existe pas.`;
 	}
 
 	const auth = new Firebase().auth;
 
 	if (!auth.currentUser) {
-		return 'Votre session a expiré, veuillez vous reconnecter';
+		return 'Votre session a expiré, veuillez vous reconnecter.';
 	}
 
 	const currentUser = auth.currentUser.uid;
@@ -27,7 +27,7 @@ export const isGuardAdmin = async (projectUID: string, firestore: FirestoreServi
 	const isMemberAdmin = projectExist.members.some(member => member.uid === currentUser && member.role === MemberRole.ADMIN);
 
 	if (!isAdmin && !isMemberAdmin) {
-		return 'Vous devez être administrateur du projet pour effectuer cette action';
+		return 'Vous devez être administrateur du projet pour effectuer cette action.';
 	}
 
 	return null;
@@ -45,7 +45,7 @@ export const addProject = createAsyncThunk(
 			const projectCreated = await firestore.createDocument(project);
 
 			if (!projectCreated.valid) {
-				return rejectWithValue('Erreur lors de la création du projet');
+				return rejectWithValue('Erreur lors de la création du projet.');
 			}
 
 			return {
@@ -53,7 +53,7 @@ export const addProject = createAsyncThunk(
 				uid: projectCreated.uid
 			};
 		} catch (err) {
-			return rejectWithValue('Erreur lors de la création du projet');
+			return rejectWithValue('Erreur lors de la création du projet.');
 		}
 	}
 )
@@ -83,7 +83,7 @@ export const getProjects = createAsyncThunk(
 			}]);
 		} catch (err) {
 			console.log(err);
-			return rejectWithValue('Erreur lors de la récupération des projets');
+			return rejectWithValue('Erreur lors de la récupération des projets.');
 		}
 	}
 )
@@ -99,7 +99,7 @@ export const getProject = createAsyncThunk(
 		try {
 			return await firestore.getDocument<ProjectInterface>(projectUID);
 		} catch (err) {
-			return rejectWithValue(`Erreur lors de la récupération du projet : ${projectUID}`);
+			return rejectWithValue(`Erreur lors de la récupération du projet : ${projectUID}.`);
 		}
 	}
 )
@@ -113,7 +113,7 @@ export const setProject = createAsyncThunk(
 		const firestore = new FirestoreService<ProjectInterface>('projects');
 
 		if (!project.uid) {
-			return rejectWithValue('UID du projet manquant');
+			return rejectWithValue('UID du projet manquant.');
 		}
 
 		const error = await isGuardAdmin(project.uid, firestore);
@@ -125,7 +125,7 @@ export const setProject = createAsyncThunk(
 		try {
 			return await firestore.updateDocument(project.uid, { ...project });
 		} catch (err) {
-			return rejectWithValue('Erreur lors de la mise à jour du projet');
+			return rejectWithValue('Erreur lors de la mise à jour du projet.');
 		}
 	}
 )
@@ -139,7 +139,7 @@ export const removeProject = createAsyncThunk(
 		const firestore = new FirestoreService<ProjectInterface>('projects');
 
 		if (!projectUID) {
-			return rejectWithValue('UID du projet manquant');
+			return rejectWithValue('UID du projet manquant.');
 		}
 
 		const error = await isGuardAdmin(projectUID, firestore);
@@ -151,7 +151,7 @@ export const removeProject = createAsyncThunk(
 		try {
 			return await firestore.deleteDocument(projectUID);
 		} catch (err) {
-			return rejectWithValue('Erreur lors de la suppression du projet');
+			return rejectWithValue('Erreur lors de la suppression du projet.');
 		}
 	}
 )

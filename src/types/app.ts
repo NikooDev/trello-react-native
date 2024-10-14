@@ -5,6 +5,7 @@ export interface AppStateInterface {
 		handleStyle?: boolean;
 		height: number;
 		name: string | null;
+		data?: any | null;
 	}
 }
 
@@ -15,6 +16,7 @@ export interface AppStateActionsInterface {
 			handleStyle?: boolean;
 			height: number;
 			name: string | null;
+			data?: any | null;
 		}
 	};
 }

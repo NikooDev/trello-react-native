@@ -7,6 +7,17 @@ export const addList = createAsyncThunk(
   'list/add',
   async (projectList: { list: ListInterface, projectUID: string }, {rejectWithValue}) => {
     const firestore = new FirestoreService<ListInterface>(`projects/${projectList.projectUID}/lists`);
+		const firestoreProject = new FirestoreService<ListInterface>('projects');
+
+		if (!projectList.projectUID) {
+			return rejectWithValue('UID du projet manquant');
+		}
+
+		const error = await isGuardAdmin(projectList.projectUID, firestoreProject);
+
+		if (error) {
+			return rejectWithValue(error);
+		}
 
     try {
       const listCreated = await firestore.createDocument<ListInterface>(projectList.list);
@@ -46,7 +57,7 @@ export const setList = createAsyncThunk(
 	'list/set',
 	async (updateList: { list: Partial<ListInterface>, projectUID: string }, { rejectWithValue }) => {
 		const firestore = new FirestoreService<ListInterface>(`projects/${updateList.projectUID}/lists`);
-		const firestoreProject = new FirestoreService<ListInterface>(`projects`);
+		const firestoreProject = new FirestoreService<ListInterface>('projects');
 
 		if (!updateList.projectUID) {
 			return rejectWithValue('UID du projet manquant');

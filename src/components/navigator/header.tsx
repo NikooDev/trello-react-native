@@ -15,7 +15,7 @@ const Header = (props: BottomTabHeaderProps) => {
 	const isHome = screenName === 'Home';
 	const isSettings = screenName === 'Profile';
 	const isAddTabs = screenName === 'CreateProject' || screenName === 'Chat';
-	const isNotEllipsis = screenName !== 'Profile' && screenName !== 'CreateProject' && screenName !== 'Chat';
+	const isNotEllipsis = screenName !== 'Home' && screenName !== 'Profile' && screenName !== 'CreateProject' && screenName !== 'Chat';
 	const dispatch = useDispatch();
 
 	const handleBottomSheet = () => {

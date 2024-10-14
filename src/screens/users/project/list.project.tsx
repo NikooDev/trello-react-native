@@ -106,8 +106,9 @@ const ListProject: React.FC<ListProjectInterface> = ({ item, index, projectUID }
 								<Button onPress={handleSubmitList} textSize={0} children={null} icon="checkmark-outline" className={Class('h-11 w-12 rounded-l-lg rounded-r-2xl', titleList && (titleList !== item.title) ? 'bg-primary' : 'bg-primary/50')} iconColor="#ffffffe6" iconSize={24}/>
 							</Animated.View>
 						) : !loading ? (
-							<Animated.View entering={FadeInUp.duration(150)} exiting={FadeOutUp.duration(150)}>
-								<P size={17} light className={Class('text-center', item.title && 'font-text-bold', addListTitle && 'mb-5')}>{ item.title ? item.title : 'Ajouter une liste' }</P>
+							<Animated.View entering={FadeInUp.duration(150)} exiting={FadeOutUp.duration(150)} className="flex-row items-center">
+								<P size={17} light className={Class('text-center flex-1', item.title && 'font-text-bold', addListTitle && 'mb-5')}>{ item.title ? item.title : 'Ajouter une liste' }</P>
+								{ item.title && (<Button textSize={0} children={null} className="pr-1" icon="ellipsis-horizontal" color="none" iconSize={24} iconColor="#fff"/>) }
 							</Animated.View>
 						) : (
 							<ActivityIndicator size="small" color="#ffffffe6"/>
