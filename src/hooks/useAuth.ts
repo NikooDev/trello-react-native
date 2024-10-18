@@ -1,19 +1,24 @@
 import { useCallback, useEffect } from 'react';
 import { onAuthStateChanged, type User } from 'firebase/auth';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getUser, setUser } from '@Action/user.action';
 import { doc, onSnapshot } from 'firebase/firestore';
-import { RootDispatch } from '@Type/store';
+import { signOut } from '@Action/auth.action';
+import { RootDispatch, RootStateType } from '@Type/store';
 import Firebase, { authKey } from '@Service/firebase/init';
 import { setLoginError, setLoginSuccess, setLogout } from '@Store/reducers/auth.reducer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { resetStore } from '@Store/reducers';
+import { UserInterface } from '@Type/user';
 
 /**
  * @description Hook for authentication -> Checks the user's authentication state
  */
 const useAuth = () => {
 	const dispatch = useDispatch<RootDispatch>();
+	const { user: currentUser } = useSelector((state: RootStateType) => state.user);
 	const auth = new Firebase().auth;
+	let unsubscribeUserDoc: (() => void) | null = null;
 
 	/**
 	 * @description Listens for authentication state changes
@@ -49,27 +54,35 @@ const useAuth = () => {
 	 * @description Listens for user state changes
 	 * @param userUID
 	 */
-	const onUserStateChange = (userUID: string) => {
+	const onUserStateChange = useCallback((userUID: string) => {
 		const db = new Firebase().db;
 
 		const userDocRef = doc(db, 'users', userUID);
 
-		const unsubscribe = onSnapshot(userDocRef, (doc) => {
+		unsubscribeUserDoc = onSnapshot(userDocRef, (doc) => {
 			if (doc.exists()) {
-				const user = doc.data();
+				const user = doc.data() as UserInterface;
 
-				dispatch(setUser(user));
+				if (user !== currentUser) {
+					dispatch(setUser(user));
+				}
 			} else {
 				logoutState();
 			}
 		}, (error) => {
-			console.error('Error listening to user document:', error);
-			logoutState();
+			console.log(error);
 		});
+	}, [currentUser])
 
-		return () => {
-			unsubscribe();
+	const logout = async () => {
+		dispatch(setLogout());
+		dispatch(resetStore());
+
+		if (unsubscribeUserDoc) {
+			unsubscribeUserDoc();
 		}
+
+		await signOut();
 	}
 
 	/**
@@ -113,7 +126,7 @@ const useAuth = () => {
 	}
 
 	return {
-		checkAuth
+		checkAuth, logout
 	}
 }
 

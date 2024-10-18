@@ -1,14 +1,15 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Dimensions, Pressable, View } from 'react-native';
 import { theme } from '@Asset/theme/trello';
-import { setTmpCoverID, setTmpCoverURI } from '@Store/reducers/project.reducer';
-import { closeBottomSheet } from '@Store/reducers/app.reducer';
+import { setTmpCoverID, setTmpCoverURI, setUpdateCoverID, setUpdateCoverURI } from '@Store/reducers/project.reducer';
+import { closeBottomSheet, openBottomSheet } from '@Store/reducers/app.reducer';
 import FastImage from 'react-native-fast-image';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { searchPhoto } from '@Service/pexels/store';
 import { BottomSheetFlatList, BottomSheetFlatListMethods } from '@gorhom/bottom-sheet';
 import { Photo } from 'pexels';
 import Button from '@Component/ui/button';
+import { RootDispatch, RootStateType } from '@Type/store';
 
 /**
  * @description CreateProject -> BottomSheet set cover
@@ -16,8 +17,10 @@ import Button from '@Component/ui/button';
 const CreateProjectCovers = () => {
 	const [cover, setCover] = useState<Photo[] | undefined>(undefined);
 	const { width } = Dimensions.get('screen');
+	const { data } = useSelector((state: RootStateType) => state.app.bottomSheet);
 	const bottomListRef = useRef<BottomSheetFlatListMethods>(null);
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<RootDispatch>();
+	const bottomSheetData = data as { update: boolean };
 
 	const loadPicture = useCallback(async () => {
 		const result = await searchPhoto(50);
@@ -40,6 +43,15 @@ const CreateProjectCovers = () => {
 	}
 
 	const handleSetCover = (id: number, src: Photo['src']) => {
+		if (bottomSheetData && bottomSheetData.update) {
+			dispatch(setUpdateCoverID(id));
+			dispatch(setUpdateCoverURI(src));
+
+			return dispatch(openBottomSheet({
+				bottomSheet: { name: 'Project', height: 100, enablePanDownToClose: false, handleStyle: false }
+			}));
+		}
+
 		dispatch(setTmpCoverID(id));
 		dispatch(setTmpCoverURI(src));
 		dispatch(closeBottomSheet());

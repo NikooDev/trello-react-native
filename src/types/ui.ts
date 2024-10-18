@@ -2,6 +2,7 @@ import React from 'react';
 import { Pressable, StyleProp, ViewStyle } from 'react-native';
 import { ClassNameInterface } from '@Type/layout';
 import { AnimatedStyle } from 'react-native-reanimated';
+import { AvatarFullConfig } from '@zamplyy/react-native-nice-avatar';
 
 export interface ParagraphInterface extends ClassNameInterface {
 	size: number;

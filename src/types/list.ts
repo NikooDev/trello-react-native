@@ -17,6 +17,6 @@ export interface ListStateInterface {
 
 export interface ListProjectInterface {
 	item: ListInterface | { [key: string]: any };
-	index: number;
+	nbTasks: number;
 	projectUID: string;
 }

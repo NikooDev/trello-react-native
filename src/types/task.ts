@@ -3,13 +3,17 @@ import { PriorityEnum } from '@Type/project';
 export interface TaskInterface {
 	uid: string;
 	userUID: string;
-	projectUID: string;
 	title: string;
-	start: Date;
-	end: Date;
-	description: string;
+	start: Date | null;
+	end: Date | null;
+	description: string | null;
 	author: string;
-	contributors: string[];
-	priority: PriorityEnum;
+	contributors: string[] | null;
+	priority: PriorityEnum | null;
 	created: Date;
+}
+
+export interface TaskProjectInterface {
+	item: TaskInterface;
+	index: number;
 }

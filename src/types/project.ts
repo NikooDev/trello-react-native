@@ -22,6 +22,7 @@ export interface ProjectInterface {
 	priority: PriorityEnum
 	title: string;
 	cover: {
+		coverID: number;
 		landscape: string;
 		portrait: string;
 	};
@@ -38,6 +39,8 @@ export interface ProjectStateInterface {
 	error: string | null;
 	tmpMembers: MembersInterface[];
 	tmpCoverID: string | null;
+	tmpUpdateCoverID: string | null;
 	tmpCoverURI: Photo['src'];
+	tmpUpdateCoverURI: Photo['src'];
 	sortPriority: PriorityEnum | undefined;
 }

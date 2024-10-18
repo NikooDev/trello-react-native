@@ -35,7 +35,7 @@ const Avatar: React.FC<AvatarInterface> = ({
 		setIsError(true);
 	}
 
-  return (
+	return (
 		<View className={Class('relative justify-center', className)} style={[style, viewSize]}>
 			{
 				avatarURI && !isError && (
@@ -63,7 +63,7 @@ const Avatar: React.FC<AvatarInterface> = ({
 				)
 			}
 		</View>
-  );
+	);
 }
 
 export default Avatar;

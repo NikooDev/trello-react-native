@@ -5,17 +5,19 @@ import { theme } from '@Asset/theme/trello';
 const loadComponent = (componentName: string | null) => {
 	switch (componentName) {
 		case 'Project':
-			return lazy(() => import('@Component/bottomsheets/ProjectSettings'));
+			return lazy(() => import('@Component/bottomsheets/projectSettings'));
 		case 'Projects':
-			return lazy(() => import('@Component/bottomsheets/ProjectsOptions'));
+			return lazy(() => import('@Component/bottomsheets/projectsOptions'));
 		case 'Calendar':
-			return lazy(() => import('@Component/bottomsheets/CalendarOptions'));
+			return lazy(() => import('@Component/bottomsheets/calendarOptions'));
 		case 'Profile':
-			return lazy(() => import('@Component/bottomsheets/ProfileSettings'));
+			return lazy(() => import('@Component/bottomsheets/profileSettings'));
+		case 'Task':
+			return lazy(() => import('@Component/bottomsheets/taskSettings'));
 		case 'CreateProjectCovers':
-			return lazy(() => import('@Component/bottomsheets/CreateProjectCovers'));
+			return lazy(() => import('@Component/bottomsheets/createProjectCovers'));
 		case 'CreateProjectAddMembers':
-			return lazy(() => import('@Component/bottomsheets/CreateProjectAddMembers'));
+			return lazy(() => import('@Component/bottomsheets/createProjectAddMembers'));
 		default:
 			return null;
 	}

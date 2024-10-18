@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { ActivityIndicator, Alert, Dimensions, Pressable, View } from 'react-native';
 import { MemberRole, PriorityEnum } from '@Type/project';
 import { RootStackPropsUser } from '@Type/stack';
@@ -22,24 +22,29 @@ import Button from '@Component/ui/button';
 const ProjectsScreen = ({ navigation } : RootStackPropsUser<'Projects'>) => {
 	const { user } = useSelector((state: RootStateType) => state.user);
 	const { projects, loading, sortPriority, error } = useSelector((state: RootStateType) => state.project);
+	const { lists } = useSelector((state: RootStateType) => state.list);
 	const { width } = Dimensions.get('screen');
 	const dispatch = useDispatch<RootDispatch>();
 
 	const loadProjects = useCallback(async () => {
 		if (user.uid) {
-			dispatch(getProjects(user.uid));
+			setTimeout(() => dispatch(getProjects(user.uid)), 500);
 		}
 	}, [dispatch, user]);
 
 	useFocusEffect(
 		useCallback(() => {
 			loadProjects().then();
+		}, [loadProjects])
+	);
 
+	useFocusEffect(
+		useCallback(() => {
 			return () => {
 				dispatch(resetProjects());
 			}
-		}, [loadProjects, dispatch])
-	);
+		}, [dispatch])
+	)
 
 	const filterProjectsByPriority = (pr: PriorityEnum | undefined) => {
 		if (pr) {
@@ -53,7 +58,7 @@ const ProjectsScreen = ({ navigation } : RootStackPropsUser<'Projects'>) => {
 		<ScreenLayout statusBarStyle="default" className="py-4">
 			<View className="flex-1">
 				{
-					!loading && !error && projects.length === 0 && (
+					(lists.length === 0 && !loading && !error && projects.length === 0) && (
 						<Animated.View entering={FadeInUp.delay(300)} className="flex-1 items-center justify-center">
 							<FastImage source={require('@Asset/img/login.webp')} className="h-52 opacity-50 absolute top-14" resizeMode="contain" style={{width: width - 90}}/>
 							<P size={20} weight="semibold" className="text-center mb-4">Vous n'avez pas encore de projet</P>
@@ -93,7 +98,7 @@ const ProjectsScreen = ({ navigation } : RootStackPropsUser<'Projects'>) => {
 				{
 					loading ? (
 						<ActivityIndicator size="large" color={theme.primary} className="mt-4"/>
-					) : filterProjectsByPriority(sortPriority).length > 0 && !error && (
+					) : lists.length === 0 && filterProjectsByPriority(sortPriority).length > 0 && !error && (
 						<FlatList
 							extraData={sortPriority}
 							data={filterProjectsByPriority(sortPriority)}
@@ -104,7 +109,7 @@ const ProjectsScreen = ({ navigation } : RootStackPropsUser<'Projects'>) => {
 								const isMembers = item.members.some((member) => member.uid === user.uid && member.role === MemberRole.MEMBER);
 
 								return (
-									<Animated.View entering={FadeInLeft.delay(100 * index)} key={sortPriority} className="mb-3">
+									<Animated.View entering={FadeInLeft.delay(100 * index)} key={projects.length > 0 ? '1' : '0'} className="mb-3">
 										<Pressable className="relative px-4" onPress={() => navigation.navigate('Menu', { screen: 'Project', params: { uid: item.uid } })}>
 											<View className="rounded-t-2xl overflow-hidden">
 												<View className="absolute z-10 px-4 pt-3.5 w-full h-full">
@@ -150,11 +155,6 @@ const ProjectsScreen = ({ navigation } : RootStackPropsUser<'Projects'>) => {
 								)
 							}}
 						/>
-					)
-				}
-				{
-					error && (
-						<P size={20} weight="semibold" className="text-center mt-4">{ error }</P>
 					)
 				}
 			</View>

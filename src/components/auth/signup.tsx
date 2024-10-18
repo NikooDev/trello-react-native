@@ -195,181 +195,181 @@ const Signup = ({ navigation }: RootStackGuestNavigation) => {
   }
 
   return (
-   <>
-     <KeyboardAwareScrollView extraKeyboardSpace={-100} keyboardShouldPersistTaps="handled" contentContainerStyle={{flex: 1, justifyContent: 'center'}}>
-       <View>
-         <Animated.View entering={FadeInUp.duration(500)} className="absolute left-1/2" style={{marginLeft: -(width - 90) / 2.3, top: -(height * 0.25)}}>
-           <FastImage source={require('@Asset/img/signup.webp')} className="h-52 opacity-50" resizeMode="contain" style={{width: width - 90}}/>
-         </Animated.View>
-         <View className="mb-10 mt-5">
-           <View className="self-start absolute top-2.5 z-20">
-             <Button onPress={handleBack}
-                     children={null}
-                     textSize={0}
-                     textLight={true}
-                     color="none"
-                     iconSize={40}
-                     icon="chevron-back-outline"
-                     className="mt-4 ml-4"/>
-           </View>
-           <P size={60} light className="font-title text-6xl text-center">Trello</P>
-           <P size={24} light className="font-title text-2xl text-center -mt-2">Inscription</P>
-         </View>
-         <Animated.View pointerEvents="auto"
-                        className="px-4"
-                        entering={!avatarMode ? SlideInLeft.duration(300) : SlideInRight.duration(300)}
-                        exiting={!avatarMode ? SlideOutLeft.duration(300) : SlideOutRight.duration(300)}
-                        key={!avatarMode ? 'signup' : 'avatar'}>
-           {
-             !avatarMode ? (
-               <Animated.View entering={FadeInDown}>
-                 <View className="flex-row gap-3">
-                   <View className={twMerge('bg-[#0000003f] border-[#0000001f] rounded-2xl border mb-3 flex-1', focus.firstname && 'bg-[#0000005f] border-[#0000003f]')}>
-                     <TextInput ref={firstnameRef}
-                                keyboardType="default"
-                                placeholder="Prénom"
-                                placeholderTextColor="#ffffff8f"
-                                returnKeyType="next"
-                                autoComplete="given-name"
-                                textContentType="name"
-                                textAlignVertical="center"
-                                autoCorrect={false}
-                                spellCheck={false}
-                                className="font-text-regular text-lg px-4 text-white h-14 capitalize"
-                                value={user.firstname ? user.firstname.toString() : ''}
-                                onFocus={() => handleFocus('firstname')}
-                                onBlur={handleBlur}
-                                onSubmitEditing={() => handleNext(lastnameRef)}
-                                onChangeText={(value) => handleChange('firstname', value)}/>
-                   </View>
-                   <View className={twMerge('bg-[#0000003f] border-[#0000001f] rounded-2xl border mb-3 flex-1', focus.lastname && 'bg-[#0000005f] border-[#0000003f]')}>
-                     <TextInput ref={lastnameRef}
-                                keyboardType="default"
-                                placeholder="Nom"
-                                placeholderTextColor="#ffffff8f"
-                                returnKeyType="next"
-                                autoComplete="family-name"
-                                textContentType="name"
-                                textAlignVertical="center"
-                                autoCorrect={false}
-                                spellCheck={false}
-                                className="font-text-regular text-lg px-4 text-white h-14 capitalize"
-                                value={user.lastname ? user.lastname.toString() : ''}
-                                onFocus={() => handleFocus('lastname')}
-                                onBlur={handleBlur}
-                                onSubmitEditing={() => handleNext(emailRef)}
-                                onChangeText={(value) => handleChange('lastname', value)}/>
-                   </View>
-                 </View>
-                 <View className={twMerge('bg-[#0000003f] border-[#0000001f] rounded-2xl border mb-3', focus.email && 'bg-[#0000005f] border-[#0000003f]')}>
-                   <TextInput ref={emailRef}
-                              keyboardType="email-address"
-                              placeholder="Adresse e-mail"
-                              placeholderTextColor="#ffffff8f"
-                              returnKeyType="next"
-                              textContentType="emailAddress"
-                              textAlignVertical="center"
-                              autoComplete="email"
-                              autoCapitalize="none"
-                              autoCorrect={false}
-                              spellCheck={false}
-                              className="font-text-regular text-lg px-4 text-white h-14"
-                              value={user.email ? user.email.toString() : ''}
-                              onFocus={() => handleFocus('email')}
-                              onBlur={handleBlur}
-                              onSubmitEditing={() => handleNext(passwordRef)}
-                              onChangeText={(value) => handleChange('email', value)}/>
-                 </View>
-                 <View className={twMerge('bg-[#0000003f] border-[#0000001f] rounded-2xl border mb-3', focus.password && 'bg-[#0000005f] border-[#0000003f]')}>
-                   <TextInput ref={passwordRef}
-                              keyboardType="default"
-                              placeholder="Mot de passe"
-                              placeholderTextColor="#ffffff8f"
-                              returnKeyType="done"
-                              textContentType="password"
-                              textAlignVertical="center"
-                              secureTextEntry={!showPassword}
-                              autoCorrect={false}
-                              className="font-text-regular text-lg pl-4 text-white h-14 pr-16"
-                              value={user.password ? user.password.toString() : ''}
-                              onFocus={() => handleFocus('password')}
-                              onBlur={handleBlur}
-                              onSubmitEditing={valid ? handleSubmit : () => null}
-                              onChangeText={(value) => handleChange('password', value)}/>
-                   <Button onPress={handleShowPassword} textSize={0} icon={showPassword ? 'eye-off' : 'eye'} iconSize={28} color="none" iconColor="#fff" children={null} className="absolute top-3 right-4"/>
-                 </View>
-                 <View className="mt-4">
-                   <Button className="w-full h-14 bg-white justify-center items-center"
-                           textClass="text-center uppercase flex-row items-center text-primary"
-                           textSize={18}
-                           disabled={loading}
-                           onTouchStart={handleSubmit}>
-                     Suivant
-                   </Button>
-                 </View>
-               </Animated.View>
-             ) : (
-               <Animated.View entering={FadeInDown.delay(300)} className="items-center mb-7">
-                 <View style={{height: 150, width: 150}} className="mb-4 items-center justify-center border-2 border-white rounded-full">
-                   {
-                     loadingAvatar && (
-                       <View key={loadingAvatar ? 'loading' : 'loaded'}
-                                      className="absolute bg-white/30 rounded-full items-center justify-center" style={{height: 150, width: 150}}>
-                         <ActivityIndicator color="#fff" size="large" className="absolute"/>
-                       </View>
-                     )
-                   }
-                   {
-                     avatarErrorTimerActive && (
-                       <View className="items-center justify-center absolute top-1.5" style={{height: 150, width: 150}}>
-                         <P size={60} className="font-title" light>{ avatarErrorTimer }</P>
-                       </View>
-                     )
-                   }
-                   <FastImage source={{uri: `https://api.multiavatar.com/${avatarID}.png?apiKey=3xbMDRlBuYdc8T`}}
-                              className="rounded-full border-2 border-white"
-                              onLoadEnd={handleAvatarReady}
-                              onError={handleAvatarError}
-                              style={{height: 150, width: 150}}/>
-                 </View>
-                 <View className="flex-row w-full gap-3 mt-5">
-                   <Button color="none"
-                           className="h-14 border border-white justify-center items-center px-4"
-                           textClass="text-center uppercase flex-row items-center"
-                           textSize={15}
-                           iconClass="mb-1"
-                           textLight
-                           disabled={loading}
-                           icon="refresh"
-                           iconColor="#fff"
-                           iconSize={24}
-                           onTouchStart={() => handleRandomAvatarID()}>Changer d'avatar</Button>
-                   <Button className="h-14 bg-white justify-center items-center flex-1"
-                           textClass="text-center uppercase flex-row items-center text-primary"
-                           textSize={18}
-                           disabled={loading}
-                           onTouchStart={handleSubmit}>{
-                     loading ? (
-                       <ActivityIndicator color={theme.primary} size={24}/>
-                     ) : 'S\'inscrire'
-                   }
-                   </Button>
-                 </View>
-               </Animated.View>
-             )
-           }
-         </Animated.View>
-       </View>
-     </KeyboardAwareScrollView>
-     <View className="mb-5 px-4">
-       <Button color="none"
-               className="w-full py-4 border border-white self-auto"
-               textClass="text-center"
-               textLight
-               textSize={18}
-               onPress={() => navigation.navigate('Auth', { isLogin: true })}>J'ai déjà un compte</Button>
-     </View>
-   </>
+    <>
+      <KeyboardAwareScrollView extraKeyboardSpace={-100} keyboardShouldPersistTaps="handled" contentContainerStyle={{flex: 1, justifyContent: 'center'}}>
+        <View>
+          <Animated.View entering={FadeInUp.duration(500)} className="absolute left-1/2" style={{marginLeft: -(width - 90) / 2.3, top: -(height * 0.25)}}>
+            <FastImage source={require('@Asset/img/signup.webp')} className="h-52 opacity-50" resizeMode="contain" style={{width: width - 90}}/>
+          </Animated.View>
+          <View className="mb-10 mt-5">
+            <View className="self-start absolute top-2.5 z-20">
+              <Button onPress={handleBack}
+                      children={null}
+                      textSize={0}
+                      textLight={true}
+                      color="none"
+                      iconSize={40}
+                      icon="chevron-back-outline"
+                      className="mt-4 ml-4"/>
+            </View>
+            <P size={60} light className="font-title text-6xl text-center">Trello</P>
+            <P size={24} light className="font-title text-2xl text-center -mt-2">Inscription</P>
+          </View>
+          <Animated.View pointerEvents="auto"
+                         className="px-4"
+                         entering={!avatarMode ? SlideInLeft.duration(300) : SlideInRight.duration(300)}
+                         exiting={!avatarMode ? SlideOutLeft.duration(300) : SlideOutRight.duration(300)}
+                         key={!avatarMode ? 'signup' : 'avatar'}>
+            {
+              !avatarMode ? (
+                <Animated.View entering={FadeInDown}>
+                  <View className="flex-row gap-3">
+                    <View className={twMerge('bg-[#0000003f] border-[#0000001f] rounded-2xl border mb-3 flex-1', focus.firstname && 'bg-[#0000005f] border-[#0000003f]')}>
+                      <TextInput ref={firstnameRef}
+                                 keyboardType="default"
+                                 placeholder="Prénom"
+                                 placeholderTextColor="#ffffff8f"
+                                 returnKeyType="next"
+                                 autoComplete="given-name"
+                                 textContentType="name"
+                                 textAlignVertical="center"
+                                 autoCorrect={false}
+                                 spellCheck={false}
+                                 className="font-text-regular text-lg px-4 text-white h-14 capitalize"
+                                 value={user.firstname ? user.firstname.toString() : ''}
+                                 onFocus={() => handleFocus('firstname')}
+                                 onBlur={handleBlur}
+                                 onSubmitEditing={() => handleNext(lastnameRef)}
+                                 onChangeText={(value) => handleChange('firstname', value)}/>
+                    </View>
+                    <View className={twMerge('bg-[#0000003f] border-[#0000001f] rounded-2xl border mb-3 flex-1', focus.lastname && 'bg-[#0000005f] border-[#0000003f]')}>
+                      <TextInput ref={lastnameRef}
+                                 keyboardType="default"
+                                 placeholder="Nom"
+                                 placeholderTextColor="#ffffff8f"
+                                 returnKeyType="next"
+                                 autoComplete="family-name"
+                                 textContentType="name"
+                                 textAlignVertical="center"
+                                 autoCorrect={false}
+                                 spellCheck={false}
+                                 className="font-text-regular text-lg px-4 text-white h-14 capitalize"
+                                 value={user.lastname ? user.lastname.toString() : ''}
+                                 onFocus={() => handleFocus('lastname')}
+                                 onBlur={handleBlur}
+                                 onSubmitEditing={() => handleNext(emailRef)}
+                                 onChangeText={(value) => handleChange('lastname', value)}/>
+                    </View>
+                  </View>
+                  <View className={twMerge('bg-[#0000003f] border-[#0000001f] rounded-2xl border mb-3', focus.email && 'bg-[#0000005f] border-[#0000003f]')}>
+                    <TextInput ref={emailRef}
+                               keyboardType="email-address"
+                               placeholder="Adresse e-mail"
+                               placeholderTextColor="#ffffff8f"
+                               returnKeyType="next"
+                               textContentType="emailAddress"
+                               textAlignVertical="center"
+                               autoComplete="email"
+                               autoCapitalize="none"
+                               autoCorrect={false}
+                               spellCheck={false}
+                               className="font-text-regular text-lg px-4 text-white h-14"
+                               value={user.email ? user.email.toString() : ''}
+                               onFocus={() => handleFocus('email')}
+                               onBlur={handleBlur}
+                               onSubmitEditing={() => handleNext(passwordRef)}
+                               onChangeText={(value) => handleChange('email', value)}/>
+                  </View>
+                  <View className={twMerge('bg-[#0000003f] border-[#0000001f] rounded-2xl border mb-3', focus.password && 'bg-[#0000005f] border-[#0000003f]')}>
+                    <TextInput ref={passwordRef}
+                               keyboardType="default"
+                               placeholder="Mot de passe"
+                               placeholderTextColor="#ffffff8f"
+                               returnKeyType="done"
+                               textContentType="password"
+                               textAlignVertical="center"
+                               secureTextEntry={!showPassword}
+                               autoCorrect={false}
+                               className="font-text-regular text-lg pl-4 text-white h-14 pr-16"
+                               value={user.password ? user.password.toString() : ''}
+                               onFocus={() => handleFocus('password')}
+                               onBlur={handleBlur}
+                               onSubmitEditing={valid ? handleSubmit : () => null}
+                               onChangeText={(value) => handleChange('password', value)}/>
+                    <Button onPress={handleShowPassword} textSize={0} icon={showPassword ? 'eye-off' : 'eye'} iconSize={28} color="none" iconColor="#fff" children={null} className="absolute top-3 right-4"/>
+                  </View>
+                  <View className="mt-4">
+                    <Button className="w-full h-14 bg-white justify-center items-center"
+                            textClass="text-center uppercase flex-row items-center text-primary"
+                            textSize={18}
+                            disabled={loading}
+                            onTouchStart={handleSubmit}>
+                      Suivant
+                    </Button>
+                  </View>
+                </Animated.View>
+              ) : (
+                <Animated.View entering={FadeInDown.delay(300)} className="items-center mb-7">
+                  <View style={{height: 150, width: 150}} className="mb-4 items-center justify-center border-2 border-white rounded-full">
+                    {
+                      loadingAvatar && (
+                        <View key={loadingAvatar ? 'loading' : 'loaded'}
+                              className="absolute bg-white/30 rounded-full items-center justify-center" style={{height: 150, width: 150}}>
+                          <ActivityIndicator color="#fff" size="large" className="absolute"/>
+                        </View>
+                      )
+                    }
+                    {
+                      avatarErrorTimerActive && (
+                        <View className="items-center justify-center absolute top-1.5" style={{height: 150, width: 150}}>
+                          <P size={60} className="font-title" light>{ avatarErrorTimer }</P>
+                        </View>
+                      )
+                    }
+                    <FastImage source={{uri: `https://api.multiavatar.com/${avatarID}.png?apiKey=3xbMDRlBuYdc8T`}}
+                               className="rounded-full border-2 border-white"
+                               onLoadEnd={handleAvatarReady}
+                               onError={handleAvatarError}
+                               style={{height: 150, width: 150}}/>
+                  </View>
+                  <View className="flex-row w-full gap-3 mt-5">
+                    <Button color="none"
+                            className="h-14 border border-white justify-center items-center px-4"
+                            textClass="text-center uppercase flex-row items-center"
+                            textSize={15}
+                            iconClass="mb-1"
+                            textLight
+                            disabled={loading}
+                            icon="refresh"
+                            iconColor="#fff"
+                            iconSize={24}
+                            onTouchStart={() => handleRandomAvatarID()}>Changer d'avatar</Button>
+                    <Button className="h-14 bg-white justify-center items-center flex-1"
+                            textClass="text-center uppercase flex-row items-center text-primary"
+                            textSize={18}
+                            disabled={loading}
+                            onTouchStart={handleSubmit}>{
+                      loading ? (
+                        <ActivityIndicator color={theme.primary} size={24}/>
+                      ) : 'S\'inscrire'
+                    }
+                    </Button>
+                  </View>
+                </Animated.View>
+              )
+            }
+          </Animated.View>
+        </View>
+      </KeyboardAwareScrollView>
+      <View className="mb-5 px-4">
+        <Button color="none"
+                className="w-full py-4 border border-white self-auto"
+                textClass="text-center"
+                textLight
+                textSize={18}
+                onPress={() => navigation.navigate('Auth', { isLogin: true })}>J'ai déjà un compte</Button>
+      </View>
+    </>
   );
 }
 

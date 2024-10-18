@@ -1,16 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ListStateInterface } from '@Type/list';
+import { ListInterface, ListStateInterface } from '@Type/list';
 import { addList, getLists, setList } from '@Action/list.action';
 
 export const listSlice = createSlice({
 	name: 'listReducer',
 	initialState: {
-		lists: [],
+		lists: [] as ListInterface[],
 		loading: false,
 		loadingTask: false,
 		error: null
 	} as ListStateInterface,
-	reducers: {},
+	reducers: {
+		resetLists: (state) => {
+			state.lists = [];
+		}
+	},
 	extraReducers: (builder) => {
 		builder
 		.addCase(addList.pending, (state) => {
@@ -39,12 +43,18 @@ export const listSlice = createSlice({
 			state.error = action.payload as string;
 		})
 
-		.addCase(setList.pending, (state) => {
-			state.loading = true;
+		.addCase(setList.pending, (state, action) => {
+			if (action.meta.arg.list.title) {
+				state.loading = true;
+			} else {
+				state.loadingTask = true;
+			}
+
 			state.error = null;
 		})
 		.addCase(setList.fulfilled, (state, action) => {
 			state.loading = false;
+			state.loadingTask = false;
 
 			state.lists = state.lists.map((list) =>
 				list.uid === action.meta.arg.list.uid ? { ...list, ...action.payload } : list
@@ -52,9 +62,12 @@ export const listSlice = createSlice({
 		})
 		.addCase(setList.rejected, (state, action) => {
 			state.loading = false;
+			state.loadingTask = false;
 			state.error = action.payload as string;
 		})
 	}
 })
+
+export const { resetLists } = listSlice.actions;
 
 export default listSlice.reducer;

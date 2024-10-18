@@ -23,6 +23,12 @@ export const appSlice = createSlice({
 				open: true
 			};
 		},
+		setBottomSheetData(state, action: AppStateActionsInterface) {
+			state.bottomSheet = {
+				...initialAppState.bottomSheet,
+				data: action.payload.bottomSheet.data
+			}
+		},
 		closeBottomSheet(state) {
 			state.bottomSheet = {
 				...initialAppState.bottomSheet,
@@ -33,7 +39,7 @@ export const appSlice = createSlice({
 });
 
 export const {
-	openBottomSheet, closeBottomSheet
+	openBottomSheet, closeBottomSheet, setBottomSheetData
 } = appSlice.actions;
 
 export default appSlice.reducer;

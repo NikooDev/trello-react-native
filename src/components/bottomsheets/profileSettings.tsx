@@ -3,14 +3,11 @@ import { Pressable, View } from 'react-native';
 import P from '@Component/ui/text';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Class from 'classnames';
-import { signOut } from '@Action/auth.action';
-import { useDispatch } from 'react-redux';
-import { setLogout } from '@Store/reducers/auth.reducer';
-import { resetStore } from '@Store/reducers';
+import useAuth from '@Hook/useAuth';
 
 const ProfileSettings = () => {
 	const [press, setPress] = useState<boolean[]>([false, false]);
-	const dispatch = useDispatch();
+	const { logout } = useAuth();
 
 	const handleFocus = (index: number) => {
 		const updatedPress = [...press];
@@ -20,9 +17,7 @@ const ProfileSettings = () => {
 
 	const handleLogout = async (index: number) => {
 		handleRelease(index);
-		await signOut();
-		dispatch(setLogout());
-		dispatch(resetStore());
+		await logout();
 	}
 
 	const handleUpdateProfil = (index: number) => {

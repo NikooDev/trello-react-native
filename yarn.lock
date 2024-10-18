@@ -7815,6 +7815,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash.isequal@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "lodash.isequal@npm:4.5.0"
+  checksum: da27515dc5230eb1140ba65ff8de3613649620e8656b19a6270afe4866b7bd461d9ba2ac8a48dcc57f7adac4ee80e1de9f965d89d4d81a0ad52bb3eec2609644
+  languageName: node
+  linkType: hard
+
 "lodash.merge@npm:^4.6.2":
   version: 4.6.2
   resolution: "lodash.merge@npm:4.6.2"
@@ -9375,6 +9382,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-drax@npm:^0.10.3":
+  version: 0.10.3
+  resolution: "react-native-drax@npm:0.10.3"
+  dependencies:
+    lodash.isequal: ^4.5.0
+    lodash.throttle: ^4.1.1
+    typesafe-actions: ^5.1.0
+  peerDependencies:
+    react: "*"
+    react-native: ">=0.65.0"
+    react-native-gesture-handler: ">=1.8.0"
+  checksum: 1208711ac6d3f8cee954578cd29a8cc048caa99a9b88dec616ebe96508b11e78b50271339472031ebceec101b00275d34330d48ad5985196eb5e854fdfaef957
+  languageName: node
+  linkType: hard
+
 "react-native-fast-image@npm:^8.6.3":
   version: 8.6.3
   resolution: "react-native-fast-image@npm:8.6.3"
@@ -10823,6 +10845,7 @@ __metadata:
     prettier: 2.8.8
     react: 18.3.1
     react-native: 0.75.4
+    react-native-drax: ^0.10.3
     react-native-fast-image: ^8.6.3
     react-native-gesture-handler: ^2.20.0
     react-native-keyboard-controller: ^1.14.0
@@ -10968,6 +10991,13 @@ __metadata:
     is-typed-array: ^1.1.13
     possible-typed-array-names: ^1.0.0
   checksum: f0315e5b8f0168c29d390ff410ad13e4d511c78e6006df4a104576844812ee447fcc32daab1f3a76c9ef4f64eff808e134528b5b2439de335586b392e9750e5c
+  languageName: node
+  linkType: hard
+
+"typesafe-actions@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "typesafe-actions@npm:5.1.0"
+  checksum: 63f973ca93fcd2a037bf994ec6b173a5bf2fe2eba04ea64d8ddc49f3fcac5506d4209d61e020ab07dd39a21539d9f03fbf7c9ed7a22244c3c6c0758e438f6ef5
   languageName: node
   linkType: hard
 

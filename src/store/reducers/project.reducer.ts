@@ -16,7 +16,9 @@ export const projectSlice = createSlice({
 		sortPriority: undefined,
 		tmpMembers: [],
 		tmpCoverID: null,
-		tmpCoverURI: {} as Photo['src']
+		tmpUpdateCoverID: null,
+		tmpCoverURI: {} as Photo['src'],
+		tmpUpdateCoverURI: {} as Photo['src']
 	} as ProjectStateInterface,
 	reducers: {
 		setTmpMembers: (state, action) => {
@@ -25,19 +27,25 @@ export const projectSlice = createSlice({
 		setTmpCoverID: (state, action) => {
 			state.tmpCoverID = action.payload;
 		},
+		setUpdateCoverID: (state, action) => {
+			state.tmpUpdateCoverID = action.payload;
+		},
 		setTmpCoverURI: (state, action) => {
 			state.tmpCoverURI = action.payload;
+		},
+		setUpdateCoverURI: (state, action) => {
+			state.tmpUpdateCoverURI = action.payload;
 		},
 		setSortPriority: (state, action) => {
 			state.sortPriority = action.payload;
 		},
 		resetProjects: (state) => {
-			state.projects = [];
 			state.loading = true;
+			state.projects = [];
 		},
 		resetProject: (state) => {
-			state.project = null;
 			state.loading = true;
+			state.project = null;
 		}
 	},
 	extraReducers: (builder) => {
@@ -179,7 +187,7 @@ export const projectSlice = createSlice({
 });
 
 export const {
-	setTmpMembers, setTmpCoverID, setTmpCoverURI, setSortPriority, resetProjects, resetProject
+	setTmpMembers, setTmpCoverID, setTmpCoverURI, setSortPriority, resetProjects, resetProject, setUpdateCoverID, setUpdateCoverURI
 } = projectSlice.actions;
 
 export default projectSlice.reducer;

@@ -38,7 +38,7 @@ export const userSlice = createSlice({
 					firstname = state.user.firstname,
 					lastname = state.user.lastname,
 					email = state.user.email,
-					avatarID = state.user.avatarID,
+					avatarConfig = state.user.avatarConfig,
 					badgeChat = state.user.badgeChat
 				} = action.payload;
 
@@ -47,7 +47,7 @@ export const userSlice = createSlice({
 					firstname,
 					lastname,
 					email,
-					avatarID,
+					avatarConfig,
 					badgeChat
 				};
 			}

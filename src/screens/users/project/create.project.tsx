@@ -25,6 +25,7 @@ const CreateProject = ({ navigation }: RootStackPropsUser<'CreateProject'>) => {
   const [title, setTitle] = useState<string | undefined>(undefined);
   const [cover, setCover] = useState<string | undefined>(undefined);
   const [priority, setPriority] = useState<PriorityEnum | undefined>(undefined);
+  const [loadingProject, setLoadingProject] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const { width } = Dimensions.get('screen');
   const { user } = useSelector((state: RootStateType) => state.user);
@@ -48,7 +49,7 @@ const CreateProject = ({ navigation }: RootStackPropsUser<'CreateProject'>) => {
         dispatch(setTmpCoverID(null));
         dispatch(setTmpMembers([]));
       };
-    }, [dispatch])
+    }, [])
   )
 
   useEffect(() => {
@@ -91,7 +92,7 @@ const CreateProject = ({ navigation }: RootStackPropsUser<'CreateProject'>) => {
         Alert.alert('Erreur de chargement', 'Une erreur est survenue lors du chargement de la photo.');
       }
     }
-  }, [tmpCoverID, dispatch, getPhoto, searchPhoto]);
+  }, [tmpCoverID, dispatch]);
 
   useEffect(() => {
     loadPicture().then();
@@ -113,6 +114,9 @@ const CreateProject = ({ navigation }: RootStackPropsUser<'CreateProject'>) => {
       bottomSheet: {
         name: 'CreateProjectAddMembers',
         height: 100,
+        data: {
+          update: false
+        },
         enablePanDownToClose: false
       }
     }));
@@ -131,6 +135,8 @@ const CreateProject = ({ navigation }: RootStackPropsUser<'CreateProject'>) => {
       return Alert.alert('Priorité manquante', 'Veuillez ajouter une priorité à votre projet.');
     }
 
+    setLoadingProject(true);
+
     let membersUID: string[] = [];
 
     tmpMembers.map((member) => {
@@ -145,6 +151,7 @@ const CreateProject = ({ navigation }: RootStackPropsUser<'CreateProject'>) => {
       priority,
       author: `${cap(user.firstname)} ${cap(user.lastname)}`,
       cover: {
+        coverID: parseInt(tmpCoverID as string),
         landscape: tmpCoverURI.landscape,
         portrait: tmpCoverURI.portrait
       },
@@ -165,6 +172,8 @@ const CreateProject = ({ navigation }: RootStackPropsUser<'CreateProject'>) => {
       dispatch(setTmpCoverID(null));
       dispatch(setTmpMembers([]));
       setPriority(undefined);
+
+      setLoadingProject(false);
 
       navigation.navigate('Menu', { screen: 'Project', params: { uid } });
     }
@@ -251,7 +260,16 @@ const CreateProject = ({ navigation }: RootStackPropsUser<'CreateProject'>) => {
                   )
                 }
                 <View className="mt-1 flex-1" style={{ flex: tmpMembers.length > 0 ? 0 : 1, marginLeft: tmpMembers.length ? 20 : 0 }}>
-                  <Button onPress={handleSubmit} className="py-3.5 w-full" textSize={17} color="primary" textLight textClass="uppercase text-center">Créer</Button>
+                  <Button onPress={handleSubmit} className="py-3.5 w-full justify-center items-center" textSize={17} color="primary" textLight textClass="uppercase text-center">
+                    {
+                      loadingProject ? (
+                        <View className="flex-row items-center">
+                          <ActivityIndicator size={20} color="#fff" className="mr-2"/>
+                          <P size={17} light weight="semibold">Chargement...</P>
+                        </View>
+                      ) : 'Créer'
+                    }
+                  </Button>
                 </View>
               </View>
             </View>

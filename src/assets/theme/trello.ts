@@ -1,5 +1,6 @@
 import { DefaultTheme } from '@react-navigation/native';
 import { StyleProp, TextStyle } from 'react-native';
+import { DraxViewStyleProps } from 'react-native-drax';
 
 export const theme = {
 	primary: '#0065ff',
@@ -12,12 +13,6 @@ export const NavigatorTheme = {
 		...DefaultTheme.colors,
 		background: '#f0f2f5',
 	}
-}
-
-export const textShadow: StyleProp<TextStyle> = {
-	textShadowColor: 'rgba(0, 0, 0, 0.5)',
-	textShadowOffset: {width: 0, height: 0},
-	textShadowRadius: 10
 }
 
 const shadow = {
@@ -48,4 +43,10 @@ export const shadowText = {
 	},
 	textShadowOpacity: .5,
 	textShadowRadius: 5
+}
+
+export const dragStyle: DraxViewStyleProps = {
+	style: { backgroundColor: '#ffffff66', borderRadius: 10, paddingVertical: 13, paddingHorizontal: 16, marginVertical: 4 },
+	dragInactiveStyle: { backgroundColor: '#ffffff33' },
+	dragReleasedStyle: { backgroundColor: '#ffffff33' }
 }

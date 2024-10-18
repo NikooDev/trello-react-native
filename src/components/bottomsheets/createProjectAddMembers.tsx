@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Dimensions, Keyboard, Pressable, TextInput, View } from 'react-native';
-import { closeBottomSheet } from '@Store/reducers/app.reducer';
+import { closeBottomSheet, openBottomSheet } from '@Store/reducers/app.reducer';
 import { setTmpMembers } from '@Store/reducers/project.reducer';
 import { theme } from '@Asset/theme/trello';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -31,9 +31,11 @@ const CreateProjectAddMembers = () => {
 	const swipeableRef = useRef<(SwipeableMethods | null)[]>([]);
 	const { tmpMembers } = useSelector((state: RootStateType) => state.project);
 	const { user } = useSelector((state: RootStateType) => state.user);
+	const { data } = useSelector((state: RootStateType) => state.app.bottomSheet);
 	const { height } = Dimensions.get('screen');
 	const keyBoardHeight = 720;
 	const dispatch = useDispatch();
+	const bottomSheetData = data as { update: boolean };
 
 	useEffect(() => {
 		let timer: ReturnType<typeof setTimeout>;
@@ -221,7 +223,6 @@ const CreateProjectAddMembers = () => {
 			setLoading(false);
 		} catch (err) {
 			console.log(err);
-
 		}
 	}, [queryMember, tmpMembers])
 
@@ -247,6 +248,12 @@ const CreateProjectAddMembers = () => {
 
 		if (keyboardOpened) {
 			Keyboard.dismiss();
+		}
+
+		if (bottomSheetData && bottomSheetData.update) {
+			return dispatch(openBottomSheet({
+				bottomSheet: { name: 'Project', height: 100, enablePanDownToClose: false, handleStyle: false }
+			}));
 		}
 
 		if (tmpMembers.length > 0) {
@@ -334,6 +341,7 @@ const CreateProjectAddMembers = () => {
 									firstname: user.firstname,
 									lastname: user.lastname,
 									email: user.email,
+									badgeChat: user.badgeChat,
 									avatarID: user.avatarID,
 									role: MemberRole.ADMIN
 								})

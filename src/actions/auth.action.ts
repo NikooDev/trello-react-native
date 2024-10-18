@@ -29,9 +29,9 @@ export const signup = async ({ email, password, firstname, lastname, avatarID }:
 		if (newUser) {
 			const user = {
 				uid: newUser.uid,
-				firstname,
-				lastname,
-				email,
+				firstname: firstname.trim(),
+				lastname: lastname.trim(),
+				email: email.trim(),
 				avatarID
 			}
 
