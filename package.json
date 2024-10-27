@@ -1,17 +1,44 @@
 {
-  "name": "Nicotrello",
+  "name": "nicotrello",
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "lint": "eslint .",
-    "start": "react-native start",
-    "test": "jest"
+    "start": "npx react-native start",
+    "asset": "npx react-native-asset",
+    "pod": "npx pod-install",
+    "reset": "npx react-native start --reset-cache",
+    "build": "cd android && ./gradlew assembleRelease",
+    "release": "adb install -r android/app/build/outputs/apk/release/app-release.apk"
   },
   "dependencies": {
+    "@gorhom/bottom-sheet": "4.6.4",
+    "@react-native-async-storage/async-storage": "^2.0.0",
+    "@react-native-community/blur": "^4.4.1",
+    "@react-native-community/datetimepicker": "^8.2.0",
+    "@react-native-google-signin/google-signin": "^13.1.0",
+    "@react-navigation/bottom-tabs": "7.0.0-rc.27",
+    "@react-navigation/native": "next",
+    "@react-navigation/native-stack": "7.0.0-rc.27",
+    "@reduxjs/toolkit": "^2.2.7",
+    "classnames": "^2.5.1",
+    "firebase": "^11.0.0",
+    "luxon": "^3.5.0",
+    "nativewind": "^2.0.11",
+    "pexels": "^1.4.0",
     "react": "18.3.1",
-    "react-native": "0.75.4"
+    "react-native": "0.75.4",
+    "react-native-drax": "^0.10.3",
+    "react-native-fast-image": "^8.6.3",
+    "react-native-gesture-handler": "^2.20.2",
+    "react-native-keyboard-controller": "^1.14.2",
+    "react-native-linear-gradient": "^2.8.3",
+    "react-native-outside-press": "^1.2.2",
+    "react-native-reanimated": "^3.16.1",
+    "react-native-safe-area-context": "^4.11.1",
+    "react-native-screens": "^3.34.0",
+    "react-native-svg": "^15.8.0",
+    "react-native-vector-icons": "^10.1.0",
+    "react-redux": "^9.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
@@ -21,14 +48,19 @@
     "@react-native/eslint-config": "0.75.4",
     "@react-native/metro-config": "0.75.4",
     "@react-native/typescript-config": "0.75.4",
+    "@types/luxon": "^3.4.2",
     "@types/react": "^18.2.6",
+    "@types/react-native-vector-icons": "^6.4.18",
     "@types/react-test-renderer": "^18.0.0",
     "babel-jest": "^29.6.3",
+    "babel-plugin-module-resolver": "^5.0.2",
     "eslint": "^8.19.0",
     "jest": "^29.6.3",
     "prettier": "2.8.8",
     "react-test-renderer": "18.3.1",
-    "typescript": "5.0.4"
+    "tailwind-merge": "^2.5.4",
+    "tailwindcss": "3.3.2",
+    "typescript": "^5.6.3"
   },
   "engines": {
     "node": ">=18"
