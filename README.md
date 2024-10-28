@@ -21,7 +21,7 @@ Création d'un "Trello"
 
 ## Aide
 
-- Pour modifier ou supprimer une liste, appuyer sur la liste.
+- Pour modifier ou supprimer une liste, dans un projet, appuyer sur le nom de la liste.
 - Vous pouvez rechercher une liste en appuyant sur la loupe lorsque vous êtes dans un projet.
 - Pour réorganiser une tâche, rester appuyé sur une tâche et glissez là vers le haut ou le bas de la liste.
 - Vous pouvez ajouter maximum 10 membres à un projet.
