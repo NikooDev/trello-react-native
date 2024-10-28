@@ -60,12 +60,11 @@ const TaskBottomsheet = () => {
     if (editMode && task && project) {
       dispatch(setTmp({ sortPriority: task.priority }));
       setTitle(task.title);
-      setStatus(task.status);
       setDateStart(task.start);
       setDateEnd(task.end);
+      setStatus(task.status);
       setContributors((task.contributors && task.contributors.length > 0) ? task.contributors : [])
       setDescription(task.description ? task.description : '');
-      setSwitchStates(project.members.map(() => false));
     }
   }, [editMode, task, project]);
 
@@ -83,8 +82,13 @@ const TaskBottomsheet = () => {
     dispatch(openBottomSheet({ height: 60 }));
   }
 
-  const handleStatusTask = (status: 'active' | 'end' | 'soon') => {
-    setStatus(status);
+  const handleStatusTask = (newStatus: 'active' | 'end' | 'soon') => {
+    dispatch(setLocalTask({
+      ...task,
+      contributors: contributors ?? (task && task.contributors),
+      status: newStatus
+    }))
+    setStatus(newStatus);
   }
 
   const toggleSwitch = (index: number) => {
@@ -95,7 +99,9 @@ const TaskBottomsheet = () => {
     setSwitchStates(updatedStates);
 
     const selectedContributors = project && project.members.filter((_, index) => updatedStates[index]);
-    selectedContributors && setContributors(selectedContributors);
+    if (selectedContributors) {
+      setContributors(selectedContributors);
+    }
     setSelectAll(false);
   }
 
