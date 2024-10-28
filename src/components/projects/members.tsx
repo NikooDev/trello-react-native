@@ -35,20 +35,19 @@ const Members: React.FC<MembersManagerInterface> = ({
                  textAlignVertical="center"
                  showSoftInputOnFocus={false}
                  onFocus={handleSearchMembers}/>
-      <View className="flex-row items-center w-full ml-1.5" style={{marginTop: -49}}>
+      <View className="flex-row items-center w-full ml-1.5" style={{marginTop: members.length < 10 ? -48 : -46}}>
         {
-          members.length > 0 && members.slice(0, 6).map((member, index) => (
+          members.length > 0 && members.map((member, index) => (
             <Avatar size={36} key={index} avatarID={member.avatarID} className="-mr-3"/>
           ))
         }
         {
-          members.length > 6 && (
-            <P size={15} weight="semibold" className="ml-4">+{members.length - 6}</P>
+          members.length < 10 && (
+            <View className="flex-row items-center">
+              <Icon name="add-circle" color={theme.primary} size={40}/>
+            </View>
           )
         }
-        <View className="flex-row items-center">
-          <Icon name="add-circle" color={theme.primary} size={40}/>
-        </View>
       </View>
     </View>
   );
