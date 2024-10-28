@@ -201,7 +201,13 @@ const TaskBottomsheet = () => {
     }, {
       text: 'Supprimer',
       onPress: () => {
-        dispatch(removeTask({ taskUID: task.uid, listUID, projectUID: project.uid }))
+        dispatch(setProject({ uid: project.uid, nbTasks: project.nbTasks - 1 }));
+
+        if (task.status === 'end') {
+          dispatch(setProject({ uid: project.uid, nbTasksEnd: project.nbTasksEnd - 1 }));
+        }
+
+        dispatch(removeTask({ taskUID: task.uid, listUID, projectUID: project.uid }));
         dispatch(closeBottomSheet({}));
       }
     }]);
