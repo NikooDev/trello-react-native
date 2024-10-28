@@ -17,7 +17,9 @@ Création d'un "Trello"
 - [Télécharger l'application avec le téléphone](https://mega.nz/file/lEd2EbTD#TYHAK9MQ-VwL1S8V3G7zdkqqyBZwH3XZ6dov1DI-bt0)
 
 - Une fois le fichier téléchargé, aller dans le dossier Téléchargements du système Android.
-- Ouvrez le fichier pour l'installer.
+- Ouvrez le fichier.
+- Vous devrez autoriser l'installation d'applications de sources inconnues dans les paramètres.
+- Installer sans analyser (si le système demander d'analyser).
 
 ## Aide
 
