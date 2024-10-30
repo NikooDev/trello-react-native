@@ -1,7 +1,21 @@
 import Animated from 'react-native-reanimated';
 import { Pressable } from 'react-native';
+import { DateTime } from 'luxon';
 
+export const currentDateTime = DateTime.now().setLocale('fr-FR').setZone('Europe/Paris');
 export const isEmail = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+
+/**
+ * Get 10 years before and after the current year
+ */
+const currentYear = currentDateTime.year;
+const yearRange = 10;
+const startYear = currentYear - yearRange;
+const endYear = currentYear + yearRange;
+
+export const weeks = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+export const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+export const years = Array.from({length: endYear - startYear + 1}, (_, i) => startYear + i);
 
 export const BottomSheetStyles = {
 	index: -1,

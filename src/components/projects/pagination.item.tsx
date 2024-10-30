@@ -1,6 +1,7 @@
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import { memo } from 'react';
 
-const PaginationItem = ({currentIndex, index}: { currentIndex: number, index: number }) => {
+const PaginationItem = memo(({currentIndex, index}: { currentIndex: number, index: number }) => {
 	const animatedStyle = useAnimatedStyle(() => {
 		return {
 			width: withTiming(currentIndex === index ? 24 : 12, { duration: 300 }),
@@ -14,6 +15,6 @@ const PaginationItem = ({currentIndex, index}: { currentIndex: number, index: nu
 			style={animatedStyle}
 		/>
 	)
-}
+})
 
 export default PaginationItem;

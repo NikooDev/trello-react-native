@@ -1,3 +1,4 @@
+import React from 'react';
 import CommonInterface from '@Type/common';
 import { MembersInterface, PriorityEnum, ProjectInterface } from '@Type/project';
 import { DateTime } from 'luxon';
@@ -6,6 +7,7 @@ import { UserInterface } from '@Type/user';
 
 export interface TaskInterface extends CommonInterface {
 	userUID: string;
+	listUID: string;
 	title: string;
 	author: string;
 	description: string | null;
@@ -21,12 +23,20 @@ export type CreateTaskInterface = Omit<TaskInterface, 'uid'>;
 
 export interface TaskStateInterface extends StatusStateInterface {
 	tasks: TaskInterface[];
-	task: TaskInterface | null;
+	updated: boolean;
 }
 
 export interface TaskItemInterface {
 	task: TaskInterface;
-	user: UserInterface;
-	project: ProjectInterface;
+}
+
+export interface TaskEditInterface {
+	originalTask: TaskInterface;
+	updateTask: TaskInterface;
+	setEditTask: React.Dispatch<React.SetStateAction<boolean>>;
+	setUpdateTask: React.Dispatch<React.SetStateAction<TaskInterface>>;
 	listUID: string;
+	project: ProjectInterface | null;
+	loading: boolean;
+	isAdmin: boolean;
 }

@@ -3,6 +3,8 @@ import { UserInterface } from '@Type/user';
 import StatusStateInterface from '@Type/store';
 import { RootStackUserType } from '@Type/stack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React from 'react';
+import { TaskInterface } from '@Type/task';
 
 export enum MemberRoleEnum {
 	ADMIN = 'ADMIN',
@@ -61,8 +63,11 @@ export interface ProjectItemInterface {
 
 export interface PriorityInterface {
 	sortPriority: PriorityEnum | null;
+	setUpdateTask?: React.Dispatch<React.SetStateAction<TaskInterface>>;
+	updateTask?: TaskInterface;
 	enableTitle?: boolean;
 	isToggle?: boolean;
+	isTask?: boolean;
 }
 
 export interface CoverInterface {

@@ -122,36 +122,36 @@ const ListItem: React.FC<ListItemInterface> = memo(({
 		};
 	}, [marginBottom]);
 
-	const scrollViewSizeChanged = (height: number) => {
+	const scrollViewSizeChanged = useCallback((height: number) => {
 		scrollViewTask.current?.scrollTo({y: height, animated: true});
-	}
+	}, []);
 
 	/**
 	 * Handle add list mode
 	 */
-	const handleAddList = () => {
+	const handleAddList = useCallback(() => {
 		setAddList(true);
 		setTimeout(() => {
 			inputTitleList.current?.focus();
 		}, 200);
-	}
+	}, []);
 
 	/**
 	 * Handle add task mode
 	 */
-	const handleAddTask = () => {
+	const handleAddTask = useCallback(() => {
 		setAddTask(true);
 		setTimeout(() => {
 			inputTitleTask.current?.focus();
 		}, 200);
-	}
+	}, []);
 
 	/**
 	 * Handle change title list / change title task
 	 * @param value
 	 * @param target
 	 */
-	const handleChangeTitle = (value: string, target: TargetType) => {
+	const handleChangeTitle = useCallback((value: string, target: TargetType) => {
 		switch (target) {
 			case 'createlist':
 				setUpdateTitleList(true);
@@ -161,13 +161,13 @@ const ListItem: React.FC<ListItemInterface> = memo(({
 				setTitleTask(value);
 				break;
 		}
-	}
+	}, [])
 
 	/**
 	 * Handle press outside
 	 * @param target
 	 */
-	const handlePressOutside = (target: TargetType) => {
+	const handlePressOutside = useCallback((target: TargetType) => {
 		switch (target) {
 			case 'createlist':
 				setAddList(false);
@@ -182,25 +182,25 @@ const ListItem: React.FC<ListItemInterface> = memo(({
 				setAddTask(false);
 				break;
 		}
-	}
+	}, [timerDelete]);
 
 	/**
 	 * Decrement the number of tasks
 	 * @param tasksDecrement
 	 */
-	const decrementNbTasks = (tasksDecrement: TaskInterface[]) => {
+	const decrementNbTasks = useCallback((tasksDecrement: TaskInterface[]) => {
 		const nbTasksDecrement = tasksDecrement.length;
 		const nbTasksEndDecrement = tasksDecrement.filter((task) => task.status === 'end').length;
 		const nbProjectTasks = project.nbTasks - nbTasksDecrement;
 		const nbProjectTasksEnd = project.nbTasksEnd - nbTasksEndDecrement;
 
 		dispatch(setProject({ uid: project.uid, nbTasks: nbProjectTasks, nbTasksEnd: nbProjectTasksEnd }));
-	}
+	}, [project]);
 
 	/**
 	 * Handle delete list
 	 */
-	const handleDeleteList = () => {
+	const handleDeleteList = useCallback(() => {
 		if (confirmDelete) {
 			Alert.alert(
 				`Supprimer la liste : ${list.title.cap()}`,
@@ -236,9 +236,9 @@ const ListItem: React.FC<ListItemInterface> = memo(({
 
 			setTimerDelete(timer);
 		}
-	}
+	}, [confirmDelete, list, decrementNbTasks, tasksGuards, project, timerDelete]);
 
-	const handleSubmitList = () => {
+	const handleSubmitList = useCallback(() => {
 		if (loading) return;
 
 		if (!titleList || (titleList && titleList.trim().length === 0)) {
@@ -266,12 +266,12 @@ const ListItem: React.FC<ListItemInterface> = memo(({
 		setAddList(false);
 		setUpdateTitleList(false);
 		setTitleList(null);
-	}
+	}, [loading, titleList, list, project]);
 
 	/**
 	 * Handle submit task
 	 */
-	const handleSubmitTask = () => {
+	const handleSubmitTask = useCallback(() => {
 		if (!titleTask || titleTask && titleTask.trim().length === 0) {
 			return Alert.alert('Erreur', 'Veuillez choisir un titre pour votre tâche');
 		}
@@ -279,6 +279,7 @@ const ListItem: React.FC<ListItemInterface> = memo(({
 		dispatch(createTask({
 			task: {
 				userUID: user.uid,
+				listUID: list.uid,
 				title: titleTask,
 				author: `${user.firstname.cap()} ${user.lastname.cap()}`,
 				description: null,
@@ -298,7 +299,7 @@ const ListItem: React.FC<ListItemInterface> = memo(({
 
 		setTitleTask(null);
 		setAddTask(false);
-	}
+	}, [titleTask, user, tasks, project, list]);
 
 	/**
 	 * Handle task reorder
@@ -326,7 +327,7 @@ const ListItem: React.FC<ListItemInterface> = memo(({
 		} catch (error) {
 			console.error('Error reordering tasks:', error);
 		}
-	}, [tasksGuards, project])
+	}, [tasksGuards, project, list])
 
   return (
     <View className="flex-1">
@@ -401,9 +402,7 @@ const ListItem: React.FC<ListItemInterface> = memo(({
 														return (
 															<TaskItem key={item.uid}
 																				task={rest}
-																				user={user}
-																				project={project}
-																				listUID={list.uid}/>
+															/>
 														)
 													}}
 								/>

@@ -6,6 +6,7 @@ import userReducer from '@Store/reducers/user.reducer';
 import listReducer from '@Store/reducers/list.reducer';
 import taskReducer from '@Store/reducers/task.reducer';
 import chatReducer from '@Store/reducers/chat.reducer';
+import calendarReducer from '@Store/reducers/calendar.reducer';
 
 const rootReducer = combineReducers({
 	app: appReducer,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
 	chat: chatReducer,
 	project: projectReducer,
 	list: listReducer,
-	task: taskReducer
+	task: taskReducer,
+	calendar: calendarReducer
 })
 
 const rootSlice = createSlice({

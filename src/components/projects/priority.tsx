@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { memo, useCallback, useEffect } from 'react';
 import { PriorityEnum, PriorityInterface } from '@Type/project';
 import { Dimensions, Pressable, View } from 'react-native';
 import Animated, { Extrapolation, interpolate, interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -7,10 +7,13 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch } from 'react-redux';
 import P from '@Component/ui/text';
 
-const Priority: React.FC<PriorityInterface> = ({
+const Priority: React.FC<PriorityInterface> = memo(({
 	sortPriority,
 	enableTitle = false,
-	isToggle = false
+	isToggle = false,
+	isTask = false,
+	setUpdateTask,
+	updateTask
 }) => {
 	const { width } = Dimensions.get('screen');
 	const dispatch = useDispatch();
@@ -33,15 +36,21 @@ const Priority: React.FC<PriorityInterface> = ({
 		opacityValue.value = withTiming(sortPriority ? 1 : 0, { duration: 150 });
 	}, [sortPriority]);
 
-	const handlePriority = (value: PriorityEnum, index: number) => {
+	const handlePriority = useCallback((value: PriorityEnum, index: number) => {
 		if (isToggle) {
 			dispatch(setSortPriority(sortPriority === value ? undefined : value));
-		} else {
+		}
+
+		if (isTask && updateTask && setUpdateTask) {
+			setUpdateTask({ ...updateTask, priority: value });
+		}
+
+		if (!isToggle) {
 			dispatch(setTmp({ sortPriority: value }));
 		}
 
 		priorityIndex.value = withTiming(index, { duration: 150 });
-	}
+	}, [isTask, setUpdateTask, updateTask, isToggle, sortPriority, dispatch]);
 
 	const animatedStyle = useAnimatedStyle(() => {
 		const backgroundColor = interpolateColor(
@@ -88,6 +97,6 @@ const Priority: React.FC<PriorityInterface> = ({
 			</View>
     </>
   );
-}
+})
 
 export default Priority;

@@ -1,5 +1,8 @@
 import React from 'react';
-import { ScrollView } from 'react-native-gesture-handler';
+import { TaskInterface } from '@Type/task';
+import StatusStateInterface from '@Type/store';
+import { UserInterface } from '@Type/user';
+import { ProjectInterface } from '@Type/project';
 
 export interface DayInterface {
 	day: number | null;
@@ -8,6 +11,8 @@ export interface DayInterface {
 
 export interface DaysInterface {
 	days: DayInterface[];
+	user: UserInterface;
+	project: ProjectInterface | null;
 	selectedDay: number | null;
 	setSelectedDay: React.Dispatch<number | null>;
 	currentDay: number;
@@ -15,5 +20,9 @@ export interface DaysInterface {
 	currentYear: number;
 	calendarExpand: boolean;
 	setCalendarExpand: React.Dispatch<boolean>;
-	scrollViewRef: React.RefObject<ScrollView>;
+}
+
+export interface CalendarStateInterface extends StatusStateInterface {
+	tasks: TaskInterface[];
+	tasksAll: TaskInterface[];
 }

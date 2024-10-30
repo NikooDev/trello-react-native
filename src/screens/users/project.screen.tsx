@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Dimensions, NativeScrollEvent, NativeSyntheticEvent, StyleSheet, TextInput, View, ViewToken } from 'react-native';
+import { ActivityIndicator, Alert, Dimensions, NativeScrollEvent, NativeSyntheticEvent, StyleSheet, TextInput, View, ViewToken } from 'react-native';
 import { RootStackPropsUser } from '@Type/stack';
 import { RootDispatch, RootStateType } from '@Type/store';
 import { ListInterface } from '@Type/list';
@@ -22,6 +22,7 @@ import Button from '@Component/ui/button';
 import ListItem from '@Component/projects/list.item';
 import PaginationItem from '@Component/projects/pagination.item';
 import OutsidePressHandler from 'react-native-outside-press';
+import { MemberRoleEnum } from '@Type/project';
 
 const AnimateFastImage = Animated.createAnimatedComponent(FastImage);
 
@@ -33,11 +34,12 @@ const ProjectScreen = ({ navigation }: RootStackPropsUser<'Project'>) => {
   const inputSearchList = useRef<TextInput>(null);
   const { user } = useSelector((state: RootStateType) => state.user);
   const { project } = useSelector((state: RootStateType) => state.project);
-  const { lists, loading } = useSelector((state: RootStateType) => state.list);
-  const { loading: loadingTask } = useSelector((state: RootStateType) => state.task);
+  const { lists, loading, error: errorList } = useSelector((state: RootStateType) => state.list);
+  const { loading: loadingTask, error: errorTask } = useSelector((state: RootStateType) => state.task);
   const { height, width } = Dimensions.get('screen');
   const dispatch = useDispatch<RootDispatch>();
 
+  const isAdmin = (project && project.adminUID === user.uid) || (project && project.members.some((member) => member.role === MemberRoleEnum.ADMIN));
   const heightTopBar = 110;
 
   const viewabilityConfig = {
@@ -65,6 +67,18 @@ const ProjectScreen = ({ navigation }: RootStackPropsUser<'Project'>) => {
     }, [project?.uid, dispatch, flatListRef])
   )
 
+  useEffect(() => {
+    if (errorList) {
+      Alert.alert('Erreur', errorList);
+    }
+  }, [errorList]);
+
+  useEffect(() => {
+    if (errorTask) {
+      Alert.alert('Erreur', errorTask);
+    }
+  }, [errorTask]);
+
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const contentOffsetX = event.nativeEvent.contentOffset.x;
     const newIndex = Math.floor(contentOffsetX / (width - 40));
@@ -73,6 +87,11 @@ const ProjectScreen = ({ navigation }: RootStackPropsUser<'Project'>) => {
   }
 
   const handleProjectSettings = () => {
+    if (!isAdmin) {
+      Alert.alert('Erreur', 'Vous devez être administrateur du projet pour effectuer cette action.');
+      return;
+    }
+
     if (project) {
       navigation.navigate('Menu', { screen: 'UpsertProject', params: { create: false, projectTitle: project.title } })
     }

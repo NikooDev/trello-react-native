@@ -7,8 +7,8 @@ export const taskSlice = createSlice({
 	name: 'taskReducer',
 	initialState: {
 		tasks: [],
-		task: null,
 		loading: false,
+		updated: false,
 		status: StateStatusEnum.IDLE,
 		error: null
 	} as TaskStateInterface,
@@ -22,9 +22,6 @@ export const taskSlice = createSlice({
 		},
 		resetTasks: (state) => {
 			state.tasks = [];
-		},
-		setLocalTask: (state, action) => {
-			state.task = action.payload
 		}
 	},
 	extraReducers: (builder) => {
@@ -56,11 +53,13 @@ export const taskSlice = createSlice({
 			state.loading = true;
 			state.status = StateStatusEnum.LOADING;
 			state.error = null;
+			state.updated = false;
 		}).addCase(setTask.fulfilled, (state, action) => {
 			state.loading = false;
 
 			state.tasks = state.tasks.map((task) => task.uid === action.meta.arg.task.uid ? {...task, ...action.payload} : task);
 
+			state.updated = true;
 			state.status = StateStatusEnum.SUCCESS;
 		}).addCase(setTask.rejected, (state, action) => {
 			state.loading = false;
@@ -82,5 +81,5 @@ export const taskSlice = createSlice({
 	}
 });
 
-export const { setOrderTask, resetTasks, setHideLoading, setLocalTask } = taskSlice.actions;
+export const { setOrderTask, resetTasks, setHideLoading } = taskSlice.actions;
 export default taskSlice.reducer;

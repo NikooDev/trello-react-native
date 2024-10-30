@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useCallback } from 'react';
 import { View, Pressable } from 'react-native';
 import { PriorityEnum } from '@Type/project';
 import { TaskItemInterface } from '@Type/task';
@@ -7,28 +7,25 @@ import { useDispatch } from 'react-redux';
 import P from '@Component/ui/text';
 import Button from '@Component/ui/button';
 import Class from 'classnames';
-import { setLocalTask } from '@Store/reducers/task.reducer';
 import { openBottomSheet } from '@Store/reducers/app.reducer';
 
 const TaskItem: React.FC<TaskItemInterface> = memo(({
-	task,
-	listUID
+	task
 }) => {
 	const dispatch = useDispatch();
 
-	const handleTaskPress = () => {
-		dispatch(setLocalTask(task));
-
+	const handleTaskPress = useCallback(() => {
 		dispatch(openBottomSheet({
 			name: 'Task',
 			height: 60,
 			handleStyle: true,
 			enablePanDownToClose: true,
 			data: {
-				listUID
+				listUID: task.listUID,
+				task
 			}
 		}));
-	}
+	}, [task]);
 
 	const handlePriority = (): string => {
 		switch (task.priority) {

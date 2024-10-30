@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Dimensions, Keyboard, Pressable } from 'react-native';
 import Animated, { FadeInUp, FadeOutUp } from 'react-native-reanimated';
 import { CoverInterface } from '@Type/project';
@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux';
 import { getPhoto, searchPhoto } from '@Service/pexels/store';
 import P from '@Component/ui/text';
 
-const Cover: React.FC<CoverInterface> = ({ coverID, isCreate }) => {
+const Cover: React.FC<CoverInterface> = memo(({ coverID, isCreate }) => {
 	const [cover, setCover] = useState<string | undefined>(undefined);
 	const [loading, setLoading] = useState<boolean>(false);
 	const { width } = Dimensions.get('screen');
@@ -81,6 +81,6 @@ const Cover: React.FC<CoverInterface> = ({ coverID, isCreate }) => {
 			<P size={12} weight="semibold" className="text-white/60 absolute bottom-2 left-2">Pexels</P>
 		</Pressable>
   );
-}
+})
 
 export default Cover;

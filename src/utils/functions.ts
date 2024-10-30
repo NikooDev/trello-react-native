@@ -96,3 +96,9 @@ export const toRelativeDate = (date: DateTime): string => {
 		return 'À l’instant';
 	}
 }
+
+export const arrayEqual = <T, L>(arr1: T, arr2: L) => {
+	if (!arr1 || !arr2) return false;
+
+	return JSON.stringify(arr1) === JSON.stringify(arr2);
+};

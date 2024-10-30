@@ -3,7 +3,6 @@ import { TextInput, View } from 'react-native';
 import { openBottomSheet } from '@Store/reducers/app.reducer';
 import { MembersManagerInterface } from '@Type/project';
 import { useDispatch } from 'react-redux';
-import P from '@Component/ui/text';
 import Avatar from '@Component/ui/avatar';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { theme } from '@Asset/theme/default';

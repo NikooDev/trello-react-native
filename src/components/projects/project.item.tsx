@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import { View, Pressable, Alert, Dimensions } from 'react-native';
 import { MemberRoleEnum, ProjectItemInterface } from '@Type/project';
 import FastImage from 'react-native-fast-image';
@@ -10,7 +10,7 @@ import P from '@Component/ui/text';
 import Button from '@Component/ui/button';
 import Avatar from '@Component/ui/avatar';
 
-const ProjectItem: React.FC<ProjectItemInterface> = ({
+const ProjectItem: React.FC<ProjectItemInterface> = memo(({
 	project,
 	index,
 	user,
@@ -79,6 +79,6 @@ const ProjectItem: React.FC<ProjectItemInterface> = ({
 			</Pressable>
 		</Animated.View>
   );
-}
+})
 
 export default ProjectItem;
