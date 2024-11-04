@@ -11,6 +11,7 @@ Création d'un "Trello"
 - Affichage, modification, suppression des projects, listes, tâches
 - Gestion de membre
 - Personnalisation du projet
+- Calendrier : Affichage des tâches en fonction du projet et des dates de début et de fin
 
 ## Installation
 
