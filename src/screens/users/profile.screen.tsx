@@ -34,7 +34,7 @@ const ProfileScreen = ({ navigation }: RootStackPropsUser<'Profile'>) => {
       return () => {
         dispatch(resetProjects());
       }
-    }, [dispatch, user])
+    }, [dispatch, user.uid])
   )
 
   const lastProjects = useMemo(() => {

@@ -50,7 +50,7 @@ const Header = (props: BottomTabHeaderProps) => {
 	}
 
   return (
-    <View className={Class(bgHeader(screenName), 'flex-row items-center justify-between px-4 pb-2')} style={{height: 84, paddingTop: top + 5}}>
+    <View className={Class(bgHeader(screenName), 'flex-row items-center justify-between px-4 pb-2')} style={{height: 90, paddingTop: top + 10}}>
 			<View className="flex-row items-center">
 				{
 					isChat && chatProject && (
