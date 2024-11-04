@@ -9,7 +9,11 @@ export const getCalendarTasks = createAsyncThunk(
 	async (calendarTasks: { projectUID: string, start?: Date, end?: Date, userUID: string, isAll: boolean }, { rejectWithValue }) => {
 		const firestoreLists = new FirestoreService<ListInterface>(`projects/${calendarTasks.projectUID}/lists`);
 
+		const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 		try {
+			await delay(200);
+
 			const lists = (await firestoreLists.search([])) as ListInterface[];
 			const allTasksPromises = lists.map(async (list) => {
 				const firestoreTasks = new FirestoreService<TaskInterface>(`projects/${calendarTasks.projectUID}/lists/${list.uid}/tasks`);

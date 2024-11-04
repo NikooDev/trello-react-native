@@ -103,6 +103,7 @@ const ProjectsScreen = ({ navigation }: RootStackPropsUser<'Projects'>) => {
                      extraData={sortPriority}
                      keyExtractor={(item) => item.uid}
                      style={{paddingVertical: 16}}
+                     contentContainerStyle={{paddingBottom: 140}}
                      renderItem={({ item, index }) =>
                        <ProjectItem key={item.uid}
                                     project={item}

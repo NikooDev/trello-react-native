@@ -2,6 +2,8 @@ import { AppStateBottomSheetInterface, AppStateInterface, DebouncedFuncInterface
 import { PayloadAction } from '@reduxjs/toolkit';
 import { RootStackUserType } from '@Type/stack';
 import { DateTime } from 'luxon';
+import { DayInterface } from '@Type/calendar';
+import { PriorityEnum } from '@Type/project';
 
 DateTime.prototype.toRelativeDate = function (): string {
 	return toRelativeDate(this);
@@ -15,6 +17,46 @@ export const cap = (str: string | null) => {
 	if (str === null || str.length === 0) return '';
 
 	return str.replace(str[0], str[0].toUpperCase())
+}
+
+export const getDays = (currentMonth: number, currentYear: number) => {
+	const days: DayInterface[] = [];
+	const month = currentMonth;
+	const year = currentYear;
+
+	if (year > 0 && month >= 1 && month <= 12) {
+		const startOfMonth = DateTime.fromObject({year, month});
+		const daysInMonth = startOfMonth.endOf('month').day;
+		const startDayIndex = (startOfMonth.startOf('month').weekday - 1 + 7) % 7;
+
+		for (let i = 0; i < startDayIndex; i++) {
+			days.push({
+				day: null,
+				disabled: true
+			});
+		}
+
+		for (let i = 1; i <= daysInMonth; i++) {
+			days.push({
+				day: i,
+				disabled: false
+			});
+		}
+
+		const totalDays = Math.ceil(days.length / 7) * 7;
+		const remainingDays = totalDays - days.length;
+
+		for (let i = 0; i < remainingDays; i++) {
+			days.push({
+				day: null,
+				disabled: true
+			});
+		}
+
+		return days;
+	} else {
+		return [];
+	}
 }
 
 export const toggleBottomSheet = (isOpen: boolean) => (
@@ -102,3 +144,16 @@ export const arrayEqual = <T, L>(arr1: T, arr2: L) => {
 
 	return JSON.stringify(arr1) === JSON.stringify(arr2);
 };
+
+export const handlePriority = (priority: PriorityEnum): string => {
+	switch (priority) {
+		case PriorityEnum.HIGH:
+			return 'bg-red-500';
+		case PriorityEnum.MEDIUM:
+			return 'bg-orange-500';
+		case PriorityEnum.LOW:
+			return 'bg-green-500';
+		default:
+			return '';
+	}
+}

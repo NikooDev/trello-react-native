@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, StatusBar, TextInput, View } from 'react-native';
+import { ActivityIndicator, Alert, Keyboard, StatusBar, TextInput, View } from 'react-native';
 import { DateTime } from 'luxon';
 import { resetProject, setLocalProject, setTmp } from '@Store/reducers/project.reducer';
 import { RootDispatch, RootStateType } from '@Type/store';
@@ -118,6 +118,7 @@ const UpsertprojectScreen = ({ route, navigation }: RootStackPropsUser<'UpsertPr
         dispatch(setLocalProject(result.payload));
 
         setLoading(false);
+        Keyboard.dismiss();
 
         navigation.navigate('Menu', { screen: 'Project', params: { uid } });
       }

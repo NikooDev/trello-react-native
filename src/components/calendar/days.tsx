@@ -1,63 +1,46 @@
-import React, { memo, useCallback, useEffect } from 'react';
-import { DayInterface, DaysInterface } from '@Type/calendar';
-import { Pressable, View } from 'react-native';
+import React, { memo, useCallback, useMemo } from 'react';
+import { LayoutChangeEvent, Pressable, View } from 'react-native';
+import { DayInterface } from '@Type/calendar';
+import Animated, { FadeIn, FadeOut, SlideInLeft, SlideInRight, SlideOutLeft, SlideOutRight } from 'react-native-reanimated';
 import { currentDateTime } from '@Util/constants';
-import { DateTime } from 'luxon';
-import Class from 'classnames';
+import { setHeightDays } from '@Store/reducers/calendar.reducer';
+import { useDispatch } from 'react-redux';
 import P from '@Component/ui/text';
-import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootDispatch, RootStateType } from '@Type/store';
-import { getCalendarTasks } from '@Action/calendar.action';
+import Class from 'classnames';
+import useCalendar from '@Hook/useCalendar';
+import { DateTime } from 'luxon';
 
-/**
- * @description Days
- * @param days
- * @param selectedDay
- * @param currentDay
- * @param currentMonth
- * @param project
- * @param currentYear
- * @param calendarExpand
- * @param setSelectedDay
- * @param scrollViewRef
- * @param setCalendarExpand
- * @param user
- * @constructor
- */
-const Days: React.FC<DaysInterface> = memo(({
-	days,
-	user,
-	project,
-	selectedDay,
-	currentDay,
-	currentMonth,
-	currentYear,
-	calendarExpand,
-	setSelectedDay,
-	setCalendarExpand
-}) => {
-	const weeks = [];
-	const { tasks } = useSelector((state: RootStateType) => state.task);
-	const { tasksAll } = useSelector((state: RootStateType) => state.calendar);
-	const dispatch = useDispatch<RootDispatch>();
+const Days = memo(() => {
+	const { currentMonth, currentYear, selectedDay, direction, days, expand, tasksAll, goToDate } = useCalendar();
+	const dispatch = useDispatch();
 
-	useEffect(() => {
-		if (project) {
-			dispatch(getCalendarTasks({
-				projectUID: project.uid,
-				userUID: user.uid,
-				isAll: true
-			}));
-		}
-	}, [project, tasks, user]);
+	const enteringAnimation = direction === 'right' ? SlideInRight.duration(200) : SlideInLeft.duration(200);
+	const exitingAnimation = direction === 'right' ? SlideOutLeft.duration(200) : SlideOutRight.duration(200);
 
-	const handleSelectDay = useCallback((date: DayInterface) => {
-		if (date.disabled || !date.day) return;
+	const hasPointDates = useMemo(() => {
+		if (!tasksAll || tasksAll.length === 0) return new Set();
+		const points = new Set();
 
-		setSelectedDay(date.day);
-		setCalendarExpand(true);
-	}, [setSelectedDay, setCalendarExpand]);
+		tasksAll.forEach(task => {
+			if (!task.start || !task.end) return;
+
+			const taskStart = typeof task.start === 'string'
+				? DateTime.fromISO(task.start).setZone('Europe/Paris', { keepLocalTime: true })
+				: task.start.setZone('Europe/Paris', { keepLocalTime: true });
+
+			const taskEnd = typeof task.end === 'string'
+				? DateTime.fromISO(task.end).setZone('Europe/Paris', { keepLocalTime: true })
+				: task.end.setZone('Europe/Paris', { keepLocalTime: true });
+
+			let date = taskStart;
+			while (date <= taskEnd) {
+				points.add(date.toISODate());
+				date = date.plus({ days: 1 });
+			}
+		});
+
+		return points;
+	}, [tasksAll, currentMonth, currentYear]);
 
 	/**
 	 * @description Render day
@@ -69,28 +52,14 @@ const Days: React.FC<DaysInterface> = memo(({
 			<View key={index} className="flex-row justify-center mx-2">
 				{
 					week.map((date, index) => {
-						const currentDateDay = (currentDay === date.day && currentDateTime.month === currentMonth && currentDateTime.year === currentYear && currentDay !== selectedDay);
+						const currentDateDay = (currentDateTime.day === date.day && currentDateTime.month === currentMonth && currentDateTime.year === currentYear && currentDateTime.day !== selectedDay);
 						const currentSelectedDay = (!date.disabled && selectedDay) === date.day;
-
-						const hasPoint = tasksAll.some(task => {
-							if (task.start === null || task.end === null) return false;
-
-							const taskStartString = typeof task.start === 'string' ? task.start : task.start.toISO();
-							const taskEndString = typeof task.end === 'string' ? task.end : task.end.toISO();
-
-							if (!taskStartString || !taskEndString) return false;
-
-							const taskStart = DateTime.fromISO(taskStartString).minus({ days: 1 }).setZone('Europe/Paris', { keepLocalTime: true });
-							const taskEnd = DateTime.fromISO(taskEndString).setZone('Europe/Paris', { keepLocalTime: true });
-
-							const currentDate = DateTime.fromObject({
-								year: currentYear,
-								month: currentMonth,
-								day: date.day ?? undefined
-							}).setZone('Europe/Paris', { keepLocalTime: true });
-
-							return currentDate >= taskStart && currentDate <= taskEnd;
-						});
+						const currentDate = DateTime.fromObject({
+							year: currentYear,
+							month: currentMonth,
+							day: date.day ?? undefined
+						}).setZone('Europe/Paris', { keepLocalTime: true });
+						const hasPoint = hasPointDates.has(currentDate.toISODate());
 
 						const pressableClass = Class(
 							'flex-1 rounded-2xl items-center justify-center h-11 mx-1 my-1',
@@ -103,7 +72,7 @@ const Days: React.FC<DaysInterface> = memo(({
 						);
 
 						return (
-							<Pressable key={index} onPress={() => handleSelectDay(date)} className={pressableClass}>
+							<Pressable key={index} onPress={() => goToDate(date)} className={pressableClass}>
 								<P size={17} weight={currentDateDay || currentSelectedDay ? 'bold' : 'regular'} className={textClass}>{date.day || ''}</P>
 								<View className="flex-row gap-1">
 									{!date.disabled && hasPoint && (
@@ -117,40 +86,58 @@ const Days: React.FC<DaysInterface> = memo(({
 				}
 			</View>
 		)
-	}, [currentDay, currentMonth, currentYear, selectedDay, tasksAll]);
+	}, [currentMonth, currentYear, selectedDay, tasksAll]);
 
-	/**
-	 * @description Search for the current day index
-	 * If the selected day is not found, the first day of the month is selected
-	 * else the week containing the selected date is displayed
-	 */
-	const currentDayIndex = selectedDay
-		? days.findIndex(date => date.day === selectedDay)
-		: days.findIndex(date => date.day === 1);
-
-	if (currentDayIndex !== -1) {
-		const startWeekIndex = Math.floor(currentDayIndex / 7) * 7;
-		const weekDays = days.slice(startWeekIndex, startWeekIndex + 7);
-
-		/**
-		 * @description If the calendar is expanded, the week containing the selected date is displayed
-		 */
-
-		if (calendarExpand) {
-			weeks.push(renderDay(weekDays.length, weekDays));
-		} else {
-			for (let i = 0; i < days.length; i += 7) {
-				const week = days.slice(i, i + 7);
-				weeks.push(renderDay(i, week));
-			}
-		}
+	const onLayout = (event: LayoutChangeEvent) => {
+		dispatch(setHeightDays(event.nativeEvent.layout.height))
 	}
 
-	return (
-		<Animated.View entering={FadeIn} exiting={FadeOut} key={weeks.length}>
-			{ weeks }
-		</Animated.View>
-	);
+	const weeks = useMemo(() => {
+		const weekArray: React.ReactElement[] = [];
+
+		const currentDayIndex = selectedDay
+			? days.findIndex(date => date.day === selectedDay)
+			: days.findIndex(date => date.day === 1);
+
+		if (currentDayIndex !== -1) {
+			const startWeekIndex = Math.floor(currentDayIndex / 7) * 7;
+			const weekDays = days.slice(startWeekIndex, startWeekIndex + 7);
+
+			/**
+			 * @description If the calendar is expanded, the week containing the selected date is displayed
+			 */
+
+			if (expand) {
+				weekArray.push(renderDay(weekDays.length, weekDays));
+			} else {
+				for (let i = 0; i < days.length; i += 7) {
+					const week = days.slice(i, i + 7);
+					weekArray.push(renderDay(i, week));
+				}
+			}
+		}
+
+		return weekArray;
+	}, [days, expand, selectedDay, hasPointDates]);
+
+  return (
+    <Animated.View entering={enteringAnimation}
+									 exiting={exitingAnimation}
+									 key={currentMonth}
+									 onLayout={onLayout}>
+			{
+				expand ? (
+					<Animated.View key="0" entering={FadeIn.duration(200)} exiting={FadeOut.duration(200)}>
+						{ weeks }
+					</Animated.View>
+				) : (
+					<Animated.View key="1" entering={FadeIn.duration(200)} exiting={FadeOut.duration(200)}>
+						{ weeks }
+					</Animated.View>
+				)
+			}
+    </Animated.View>
+  );
 })
 
 export default Days;

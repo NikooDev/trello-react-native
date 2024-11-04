@@ -6,15 +6,15 @@ import { RootStackUserType } from '@Type/stack';
 import Animated, { FadeInLeft } from 'react-native-reanimated';
 import FastImage from 'react-native-fast-image';
 import { shadowText, theme } from '@Asset/theme/default';
-import { MemberRoleEnum, PriorityEnum, ProjectInterface } from '@Type/project';
+import { MemberRoleEnum, ProjectInterface } from '@Type/project';
 import { closeBottomSheet, setCalendarProject } from '@Store/reducers/app.reducer';
-import { resetProjects } from '@Store/reducers/project.reducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import { getProject, getProjects } from '@Action/project.action';
 import P from '@Component/ui/text';
 import Class from 'classnames';
 import Button from '@Component/ui/button';
+import { handlePriority } from '@Util/functions';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -50,19 +50,6 @@ const CalendarBottomsheet = () => {
     }
 
     dispatch(closeBottomSheet({}));
-  }
-
-  const handlePriority = (priority: PriorityEnum): string => {
-    switch (priority) {
-      case PriorityEnum.HIGH:
-        return 'bg-red-500';
-      case PriorityEnum.MEDIUM:
-        return 'bg-orange-500';
-      case PriorityEnum.LOW:
-        return 'bg-green-500';
-      default:
-        return '';
-    }
   }
 
   const handleRedirectCreateProject = () => {
