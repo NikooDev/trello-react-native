@@ -65,7 +65,7 @@ const ProfileScreen = ({ navigation }: RootStackPropsUser<'Profile'>) => {
          <P size={16}>{ user.email }</P>
        </View>
        <View>
-         <P size={18} weight="semibold" className="px-4">Derniers projects</P>
+         <P size={18} weight="semibold" className="px-4">Derniers projets</P>
          <View className="mt-4 px-4">
            {
              (loading && projects.length === 0) ? (
