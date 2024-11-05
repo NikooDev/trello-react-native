@@ -58,10 +58,10 @@ const Header = (props: BottomTabHeaderProps) => {
 										textSize={17}
 										color="none"
 										children={null}
-										iconSize={40}
+										iconSize={32}
 										textLight
 										icon="chevron-back-outline"
-										className="-ml-2 mr-1"/>
+										className="-ml-1 mr-2.5"/>
 					)
 				}
 				<P size={isHome ? 28 : 24} weight="bold" className={Class(isChat && 'w-72', isHome && 'font-title text-primary pt-1', isMenuTabs && 'text-white/80')}>

@@ -13,6 +13,6 @@ export interface ChatInterface extends CommonInterface {
 }
 
 export interface ChatStateInterface extends StatusStateInterface {
-	messages: ChatInterface[];
 	chatProject: ProjectInterface | null;
+	updateMessage: ChatInterface | null;
 }

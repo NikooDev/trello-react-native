@@ -1,6 +1,7 @@
 import FirestoreService from '@Service/firebase/store';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ChatInterface } from '@Type/chat';
+import { Timestamp } from 'firebase/firestore';
 
 export const addMessage = createAsyncThunk(
 	'chat/add',
@@ -41,8 +42,13 @@ export const setMessage = createAsyncThunk(
 			return rejectWithValue('UID du message manquant');
 		}
 
+		const message = {
+			...updateMessage.message,
+			create: updateMessage.message.created ? Timestamp.fromDate(updateMessage.message.created.toJSDate()) : new Date()
+		}
+
 		try {
-			return await firestore.updateDocument(updateMessage.message.uid, { ...updateMessage.message });
+			return await firestore.updateDocument(updateMessage.message.uid, { ...message as ChatInterface }, true);
 		} catch (err) {
 			return rejectWithValue('Erreur lors de la mise à jour du projet');
 		}

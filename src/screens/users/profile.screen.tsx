@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo } from 'react';
-import { ActivityIndicator, Dimensions, Pressable, View } from 'react-native';
+import { ActivityIndicator, Alert, Dimensions, Pressable, View } from 'react-native';
 import { DateTime } from 'luxon';
 import { shadowText, theme } from '@Asset/theme/default';
 import { resetProjects, setLocalProject } from '@Store/reducers/project.reducer';
-import Animated, { FadeInLeft, FadeOutLeft } from 'react-native-reanimated';
+import Animated, { FadeInLeft } from 'react-native-reanimated';
 import FastImage from 'react-native-fast-image';
-import { ProjectInterface } from '@Type/project';
+import { MemberRoleEnum, ProjectInterface } from '@Type/project';
 import { RootStackPropsUser } from '@Type/stack';
 import { RootDispatch, RootStateType } from '@Type/store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,6 +16,7 @@ import ScreenLayout from '@Component/layouts/screen.layout';
 import useScreen from '@Hook/useScreen';
 import Avatar from '@Component/ui/avatar';
 import P from '@Component/ui/text';
+import Button from '@Component/ui/button';
 
 const AnimatePressable = Animated.createAnimatedComponent(Pressable);
 
@@ -76,16 +77,28 @@ const ProfileScreen = ({ navigation }: RootStackPropsUser<'Profile'>) => {
                          keyExtractor={project => project.uid}
                          numColumns={2}
                          columnWrapperStyle={{gap: 16}}
-                         renderItem={({ item: project, index }) => (
-                           <AnimatePressable onPress={() => handleNavigate(project)} entering={FadeInLeft.delay(100 * index)} key={project.uid} style={{ width: (width / 2) - 24, height: width / 4 }} className="rounded-2xl overflow-hidden relative mb-3">
-                             <View className="absolute z-10 px-4 w-full py-4">
-                               <P size={15} numberOfLines={2} weight="semibold" light style={shadowText}>{ project.title.toUpperCase() }</P>
-                               <P size={13} weight="semibold" light style={shadowText}>{ project.nbTasks } tâche{ project.nbTasks > 1 && 's' }</P>
-                             </View>
-                             <FastImage source={{uri: project.cover.landscape}} resizeMode="cover" style={{ width: (width / 2) - 24, height: width / 4 }}/>
-                             <View className="bg-black/50 h-full w-full absolute top-0 left-0"/>
-                           </AnimatePressable>
-                         )}
+                         renderItem={({ item: project, index }) => {
+                           const isMembers = project.members.some((member) => member.uid === user.uid && member.role === MemberRoleEnum.MEMBER);
+                           return (
+                             <AnimatePressable onPress={() => handleNavigate(project)} entering={FadeInLeft.delay(100 * index)} key={project.uid} style={{ width: (width / 2) - 24, height: width / 4 }} className="rounded-2xl relative overflow-hidden relative mb-3">
+                               <View className="absolute z-10 px-4 w-full py-4">
+                                 <P size={15} numberOfLines={2} weight="semibold" light style={shadowText}>{ project.title.toUpperCase() }</P>
+                                 <P size={13} weight="semibold" light style={shadowText}>{ project.nbTasks } tâche{ project.nbTasks > 1 && 's' }</P>
+                               </View>
+                               <FastImage source={{uri: project.cover.landscape}} resizeMode="cover" style={{ width: (width / 2) - 24, height: width / 4 }}/>
+                               {
+                                 isMembers && (
+                                   <Button onPress={() => Alert.alert(`Projet ${project.title.cap()}`, 'Ce projet est en lecture seule.\nVous ne pouvez pas le modifier ni le supprimer.')}
+                                           className="h-8 w-8 absolute bottom-2 right-1 z-10"
+                                           textSize={0} icon="lock-closed"
+                                           iconSize={20} color="none"
+                                           iconColor="#fff" children={null}/>
+                                 )
+                               }
+                               <View className="bg-black/50 h-full w-full absolute top-0 left-0"/>
+                             </AnimatePressable>
+                           )
+                         }}
                />
              )
            }

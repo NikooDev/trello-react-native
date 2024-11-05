@@ -189,15 +189,19 @@ class FirstoreService<T> {
 	 * @description Update a document in a collection
 	 * @param uid
 	 * @param data
+	 * @param hasCreated
 	 */
-	public async updateDocument<T extends CommonInterface>(uid: string, data: Partial<T>): Promise<Partial<T> | null> {
+	public async updateDocument<T extends CommonInterface>(uid: string, data: Partial<T>, hasCreated?: boolean): Promise<Partial<T> | null> {
 		try {
 			const ref = doc(this.db, this.collectionName, uid);
 			const { created, ...partialData } = data;
 
 			await updateDoc(ref, partialData);
 
-			return data;
+			return hasCreated ? {
+				...data,
+				created
+			} : data;
 		} catch (err) {
 			console.error('Error updating document:', err);
 			return null;
