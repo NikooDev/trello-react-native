@@ -19,6 +19,7 @@ import P from '@Component/ui/text';
 import Button from '@Component/ui/button';
 import Class from 'classnames';
 import useScreen from '@Hook/useScreen';
+import { useFocusEffect } from '@react-navigation/native';
 
 const CalendarScreen = ({ navigation }: RootStackPropsUser<'Calendar'>) => {
   const { user } = useSelector((state: RootStateType) => state.user);
@@ -29,6 +30,14 @@ const CalendarScreen = ({ navigation }: RootStackPropsUser<'Calendar'>) => {
   const dispatch = useDispatch<RootDispatch>();
 
   useScreen('dark-content');
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        dispatch(resetProjects());
+      }
+    }, [dispatch])
+  )
 
   const handleGetPointsTasks = useCallback(() => {
     if (calendarProject) {
@@ -69,10 +78,6 @@ const CalendarScreen = ({ navigation }: RootStackPropsUser<'Calendar'>) => {
         end: selectedDate.endOf('day').toJSDate(),
         isAll: false
       }))
-    }
-
-    return () => {
-      dispatch(resetProjects());
     }
   }, [calendarProject, currentYear, currentMonth, selectedDay, user, updated, dispatch]);
 
