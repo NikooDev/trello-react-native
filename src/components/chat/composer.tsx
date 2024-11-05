@@ -104,7 +104,7 @@ const Composer = ({
 									 textAlignVertical="top"
 									 defaultValue={message}
 									 onChangeText={(text) => setMessage(text)}
-									 style={{fontSize: 17, fontFamily: 'Lato-Regular', minHeight: 64, maxHeight: 200, width: 328}}/>
+									 style={{fontSize: 17, fontFamily: 'Lato-Regular', color: '#fff', minHeight: 64, maxHeight: 200, width: 328}}/>
 				{
 					loading ? (
 						<ActivityIndicator size="large" color="#fff" style={{alignSelf: 'flex-end', paddingRight: 1, paddingBottom: 18}}/>
