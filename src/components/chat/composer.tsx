@@ -100,6 +100,7 @@ const Composer = ({
 			<View className="bg-slate-800 rounded-3xl mt-1 pt-2 px-4 pb-28 flex-row justify-between z-20 relative">
 				<TextInput ref={composerInputRef}
 									 placeholder="Votre message"
+									 placeholderTextColor={'#e2e8f0'}
 									 multiline
 									 textAlignVertical="top"
 									 defaultValue={message}
