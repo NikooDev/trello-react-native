@@ -32,7 +32,7 @@ Création d'un "Trello"
 - Pour modifier le rôle d'un membre dans un projet : Aller dans modifier ou créer un projet -> "Ajouter des membres" -> faites glisser le membre vers la gauche pour voir les options, le bouton toggle bleu permet de passer de Membre à Administrateur.
 - Le statut d'une tâche se modifie automatiquement en fonction de la date du début et de la fin (On peut forcer le statut pour terminer une tâche).
 - Si la tâche est terminée, la progression du projet augmente.
-- Pour modifier ou supprimer un message, faire un appuie long sur un message.
+- Dans le chat, pour modifier ou supprimer un message, faire un appuie long sur un message.
 
 ## Auteur
 
